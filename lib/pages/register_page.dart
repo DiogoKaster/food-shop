@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:projeto/dialog/endereco_dialog.dart';
+import 'package:flutter_application_2/dialog/endereco_dialog.dart';
 
 class CadastroPage extends StatefulWidget {
   @override
