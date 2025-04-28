@@ -1,0 +1,55 @@
+class Restaurant {
+  final int? id;
+  final String name;
+  final String street;
+  final String number;
+  final String neighborhood;
+  final String city;
+  final String state;
+  final String zipCode;
+  final String complement;
+  final DateTime? createdAt;
+  final DateTime? updatedAt;
+
+  Restaurant({
+    this.id,
+    required this.name,
+    required this.street,
+    required this.number,
+    required this.neighborhood,
+    required this.city,
+    required this.state,
+    required this.zipCode,
+    required this.complement,
+    this.createdAt,
+    this.updatedAt,
+  });
+
+  Restaurant copyWith({
+    int? id,
+    String? name,
+    String? street,
+    String? number,
+    String? neighborhood,
+    String? city,
+    String? state,
+    String? zipCode,
+    String? complement,
+    DateTime? createdAt,
+    DateTime? updatedAt,
+  }) {
+    return Restaurant(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      street: street ?? this.street,
+      number: number ?? this.number,
+      neighborhood: neighborhood ?? this.neighborhood,
+      city: city ?? this.city,
+      state: state ?? this.state,
+      zipCode: zipCode ?? this.zipCode,
+      complement: complement ?? this.complement,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
+    );
+  }
+}

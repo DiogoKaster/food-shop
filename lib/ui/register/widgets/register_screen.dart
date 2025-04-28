@@ -128,9 +128,6 @@ class _RegisterScreen extends State<RegisterScreen> {
                 style: OutlinedButton.styleFrom(
                   backgroundColor: colorScheme.primary,
                   padding: EdgeInsets.symmetric(vertical: 16),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
-                  ),
                 ),
                 child: Text(
                   'Criar conta',

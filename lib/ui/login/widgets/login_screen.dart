@@ -10,7 +10,7 @@ class LoginScreen extends StatelessWidget {
 
     return Scaffold(
       body: Padding(
-        padding: const EdgeInsets.all(24.0),
+        padding: EdgeInsets.all(24.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -20,7 +20,7 @@ class LoginScreen extends StatelessWidget {
                 context,
               ).textTheme.headlineMedium?.copyWith(color: colorScheme.primary),
             ),
-            const SizedBox(height: 40),
+            SizedBox(height: 40),
             Align(
               alignment: Alignment.centerLeft,
               child: Text(
@@ -28,7 +28,7 @@ class LoginScreen extends StatelessWidget {
                 style: Theme.of(context).textTheme.bodyLarge,
               ),
             ),
-            const SizedBox(height: 8),
+            SizedBox(height: 8),
             TextField(
               decoration: InputDecoration(
                 prefixIcon: Icon(Icons.email, color: colorScheme.primary),
@@ -38,7 +38,7 @@ class LoginScreen extends StatelessWidget {
                 ),
               ),
             ),
-            const SizedBox(height: 20),
+            SizedBox(height: 20),
             Align(
               alignment: Alignment.centerLeft,
               child: Text(
@@ -46,7 +46,7 @@ class LoginScreen extends StatelessWidget {
                 style: Theme.of(context).textTheme.bodyLarge,
               ),
             ),
-            const SizedBox(height: 8),
+            SizedBox(height: 8),
             TextField(
               obscureText: true,
               decoration: InputDecoration(
@@ -57,7 +57,7 @@ class LoginScreen extends StatelessWidget {
                 ),
               ),
             ),
-            const SizedBox(height: 30),
+            SizedBox(height: 30),
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
@@ -67,12 +67,12 @@ class LoginScreen extends StatelessWidget {
                 style: ElevatedButton.styleFrom(
                   backgroundColor: colorScheme.primary,
                   foregroundColor: colorScheme.onPrimary,
-                  padding: const EdgeInsets.symmetric(vertical: 16),
+                  padding: EdgeInsets.symmetric(vertical: 16),
                 ),
-                child: const Text('Entrar'),
+                child: Text('Entrar'),
               ),
             ),
-            const SizedBox(height: 20),
+            SizedBox(height: 20),
             SizedBox(
               width: double.infinity,
               child: OutlinedButton(
@@ -80,9 +80,9 @@ class LoginScreen extends StatelessWidget {
                   Navigator.pushNamed(context, AppRoutes.register);
                 },
                 style: OutlinedButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(vertical: 16),
+                  padding: EdgeInsets.symmetric(vertical: 16),
                 ),
-                child: const Text('Criar conta'),
+                child: Text('Criar conta'),
               ),
             ),
           ],
