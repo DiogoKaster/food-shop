@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class EnderecoDialog extends StatelessWidget {
   final Function(String) onEnderecoPreenchido;
 
-  EnderecoDialog({required this.onEnderecoPreenchido});
+  EnderecoDialog({super.key, required this.onEnderecoPreenchido});
 
   final TextEditingController logradouroController = TextEditingController();
   final TextEditingController numeroController = TextEditingController();

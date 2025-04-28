@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_2/pages/register_page.dart';
+import 'package:flutter_application_2/pages/home_page.dart';
 
 class LoginPage extends StatelessWidget {
   const LoginPage({super.key});
@@ -65,18 +66,23 @@ class LoginPage extends StatelessWidget {
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
-                onPressed: () {},
-                child: Text(
-                  'Entrar',
-                  style: TextStyle(
-                    color: const Color.fromARGB(255, 31, 123, 139),
-                  ),
-                ),
+                onPressed: () {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (context) => const HomePage()),
+                  );
+                },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.white,
                   padding: EdgeInsets.symmetric(vertical: 16),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(8),
+                  ),
+                ),
+                child: Text(
+                  'Entrar',
+                  style: TextStyle(
+                    color: const Color.fromARGB(255, 31, 123, 139),
                   ),
                 ),
               ),
@@ -110,17 +116,17 @@ class LoginPage extends StatelessWidget {
                     MaterialPageRoute(builder: (_) => CadastroPage()),
                   );
                 },
-                child: Text(
-                  'Criar conta',
-                  style: TextStyle(
-                    color: const Color.fromARGB(255, 31, 123, 139),
-                  ),
-                ),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.white,
                   padding: EdgeInsets.symmetric(vertical: 16),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(8),
+                  ),
+                ),
+                child: Text(
+                  'Criar conta',
+                  style: TextStyle(
+                    color: const Color.fromARGB(255, 31, 123, 139),
                   ),
                 ),
               ),
