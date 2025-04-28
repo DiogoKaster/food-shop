@@ -1,134 +1,88 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_2/ui/register/widgets/register_screen.dart';
-import 'package:flutter_application_2/ui/home/widgets/home_screen.dart';
+import 'package:flutter_application_2/routing/app_routes.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 28, 98, 119),
       body: Padding(
         padding: const EdgeInsets.all(24.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text('Login', style: TextStyle(fontSize: 24, color: Colors.white)),
-            SizedBox(height: 40),
+            Text(
+              'Login',
+              style: Theme.of(
+                context,
+              ).textTheme.headlineMedium?.copyWith(color: colorScheme.primary),
+            ),
+            const SizedBox(height: 40),
             Align(
               alignment: Alignment.centerLeft,
               child: Text(
                 'Email',
-                style: TextStyle(color: Colors.white, fontSize: 16),
+                style: Theme.of(context).textTheme.bodyLarge,
               ),
             ),
-            SizedBox(height: 8),
+            const SizedBox(height: 8),
             TextField(
               decoration: InputDecoration(
-                filled: true,
-                fillColor: Colors.white,
-                prefixIcon: Icon(
-                  Icons.email,
-                  color: const Color.fromARGB(255, 31, 123, 139),
-                ),
+                prefixIcon: Icon(Icons.email, color: colorScheme.primary),
                 hintText: 'Digite seu E-mail',
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8),
                 ),
               ),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             Align(
               alignment: Alignment.centerLeft,
               child: Text(
                 'Senha',
-                style: TextStyle(color: Colors.white, fontSize: 16),
+                style: Theme.of(context).textTheme.bodyLarge,
               ),
             ),
-            SizedBox(height: 8),
+            const SizedBox(height: 8),
             TextField(
               obscureText: true,
               decoration: InputDecoration(
-                filled: true,
-                fillColor: Colors.white,
-                prefixIcon: Icon(
-                  Icons.lock,
-                  color: const Color.fromARGB(255, 31, 123, 139),
-                ),
+                prefixIcon: Icon(Icons.lock, color: colorScheme.primary),
                 hintText: 'Digite sua senha',
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8),
                 ),
               ),
             ),
-            SizedBox(height: 30),
+            const SizedBox(height: 30),
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
                 onPressed: () {
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(builder: (context) => const HomeScreen()),
-                  );
+                  Navigator.pushReplacementNamed(context, AppRoutes.home);
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.white,
-                  padding: EdgeInsets.symmetric(vertical: 16),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
-                  ),
+                  backgroundColor: colorScheme.primary,
+                  foregroundColor: colorScheme.onPrimary,
+                  padding: const EdgeInsets.symmetric(vertical: 16),
                 ),
-                child: Text(
-                  'Entrar',
-                  style: TextStyle(
-                    color: const Color.fromARGB(255, 31, 123, 139),
-                  ),
-                ),
+                child: const Text('Entrar'),
               ),
             ),
-            SizedBox(height: 20),
-            /*Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                TextButton(
-                  onPressed: () {},
-                  child: Text(
-                    'Criar conta',
-                    style: TextStyle(color: Colors.white),
-                  ),
-                ),
-                TextButton(
-                  onPressed: () {},
-                  child: Text(
-                    'Recuperar conta',
-                    style: TextStyle(color: Colors.white),
-                  ),
-                ),
-              ],
-            ),*/
+            const SizedBox(height: 20),
             SizedBox(
               width: double.infinity,
-              child: ElevatedButton(
+              child: OutlinedButton(
                 onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (_) => RegisterScreen()),
-                  );
+                  Navigator.pushNamed(context, AppRoutes.register);
                 },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.white,
-                  padding: EdgeInsets.symmetric(vertical: 16),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
-                  ),
+                style: OutlinedButton.styleFrom(
+                  padding: const EdgeInsets.symmetric(vertical: 16),
                 ),
-                child: Text(
-                  'Criar conta',
-                  style: TextStyle(
-                    color: const Color.fromARGB(255, 31, 123, 139),
-                  ),
-                ),
+                child: const Text('Criar conta'),
               ),
             ),
           ],

@@ -5,10 +5,14 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Home'),
-        backgroundColor: const Color.fromARGB(255, 28, 98, 119),
+        title: Text('Home'),
+        centerTitle: true,
+        backgroundColor: colorScheme.primary,
+        foregroundColor: colorScheme.onPrimary,
       ),
       body: const Center(child: Text('Bem-vindo à Home Page!')),
     );

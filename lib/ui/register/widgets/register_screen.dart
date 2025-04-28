@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_2/dialog/endereco_dialog.dart';
+import 'package:flutter_application_2/ui/register/widgets/address_dialog.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -28,19 +28,21 @@ class _RegisterScreen extends State<RegisterScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 28, 98, 119),
       appBar: AppBar(
-        backgroundColor: const Color.fromARGB(255, 28, 98, 119),
         elevation: 0,
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: Colors.white),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
+        automaticallyImplyLeading: true,
         centerTitle: true,
-        title: Text('Cadastro', style: TextStyle(color: Colors.white)),
+        backgroundColor: colorScheme.primary,
+        foregroundColor: colorScheme.onPrimary,
+        title: Text(
+          'Cadastro',
+          style: Theme.of(
+            context,
+          ).textTheme.headlineSmall?.copyWith(color: colorScheme.onPrimary),
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(24.0),
@@ -48,7 +50,10 @@ class _RegisterScreen extends State<RegisterScreen> {
           children: [
             Align(
               alignment: Alignment.centerLeft,
-              child: Text('Nome', style: TextStyle(color: Colors.white)),
+              child: Text(
+                'Nome',
+                style: TextStyle(color: colorScheme.onPrimary),
+              ),
             ),
             SizedBox(height: 8),
             TextField(
@@ -57,7 +62,10 @@ class _RegisterScreen extends State<RegisterScreen> {
             SizedBox(height: 20),
             Align(
               alignment: Alignment.centerLeft,
-              child: Text('CPF', style: TextStyle(color: Colors.white)),
+              child: Text(
+                'CPF',
+                style: TextStyle(color: colorScheme.onPrimary),
+              ),
             ),
             SizedBox(height: 8),
             TextField(
@@ -66,7 +74,10 @@ class _RegisterScreen extends State<RegisterScreen> {
             SizedBox(height: 20),
             Align(
               alignment: Alignment.centerLeft,
-              child: Text('Endereço', style: TextStyle(color: Colors.white)),
+              child: Text(
+                'Endereço',
+                style: TextStyle(color: colorScheme.onPrimary),
+              ),
             ),
             SizedBox(height: 8),
             GestureDetector(
@@ -84,7 +95,10 @@ class _RegisterScreen extends State<RegisterScreen> {
             SizedBox(height: 20),
             Align(
               alignment: Alignment.centerLeft,
-              child: Text('Email', style: TextStyle(color: Colors.white)),
+              child: Text(
+                'Email',
+                style: TextStyle(color: colorScheme.onPrimary),
+              ),
             ),
             SizedBox(height: 8),
             TextField(
@@ -93,7 +107,10 @@ class _RegisterScreen extends State<RegisterScreen> {
             SizedBox(height: 20),
             Align(
               alignment: Alignment.centerLeft,
-              child: Text('Senha', style: TextStyle(color: Colors.white)),
+              child: Text(
+                'Senha',
+                style: TextStyle(color: colorScheme.onPrimary),
+              ),
             ),
             SizedBox(height: 8),
             TextField(
@@ -103,13 +120,13 @@ class _RegisterScreen extends State<RegisterScreen> {
             SizedBox(height: 30),
             SizedBox(
               width: double.infinity,
-              child: ElevatedButton(
+              child: OutlinedButton(
                 onPressed: () {
                   //TODO: Validação
                   Navigator.pop(context); //volta para tela de login
                 },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.white,
+                style: OutlinedButton.styleFrom(
+                  backgroundColor: colorScheme.primary,
                   padding: EdgeInsets.symmetric(vertical: 16),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(8),
@@ -117,9 +134,7 @@ class _RegisterScreen extends State<RegisterScreen> {
                 ),
                 child: Text(
                   'Criar conta',
-                  style: TextStyle(
-                    color: const Color.fromARGB(255, 31, 123, 139),
-                  ),
+                  style: TextStyle(color: colorScheme.onPrimary),
                 ),
               ),
             ),
@@ -132,8 +147,9 @@ class _RegisterScreen extends State<RegisterScreen> {
   InputDecoration inputDecoration(String hint, IconData icon) {
     return InputDecoration(
       filled: true,
-      fillColor: Colors.white,
-      prefixIcon: Icon(icon, color: const Color.fromARGB(255, 31, 123, 139)),
+      fillColor: Theme.of(context).colorScheme.onPrimary,
+      prefixIcon: Icon(icon),
+      prefixIconColor: Theme.of(context).colorScheme.primary,
       hintText: hint,
       border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
     );
