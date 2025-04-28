@@ -1,5 +1,6 @@
 class Restaurant {
   final int? id;
+  final String cnpj;
   final String name;
   final String street;
   final String number;
@@ -13,6 +14,7 @@ class Restaurant {
 
   Restaurant({
     this.id,
+    required this.cnpj,
     required this.name,
     required this.street,
     required this.number,
@@ -27,6 +29,7 @@ class Restaurant {
 
   Restaurant copyWith({
     int? id,
+    String? cnpj,
     String? name,
     String? street,
     String? number,
@@ -40,6 +43,7 @@ class Restaurant {
   }) {
     return Restaurant(
       id: id ?? this.id,
+      cnpj: cnpj ?? this.cnpj,
       name: name ?? this.name,
       street: street ?? this.street,
       number: number ?? this.number,
