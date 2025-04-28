@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_2/pages/register_page.dart';
-import 'package:flutter_application_2/pages/home_page.dart';
+import 'package:flutter_application_2/ui/register/widgets/register_screen.dart';
+import 'package:flutter_application_2/ui/home/widgets/home_screen.dart';
 
-class LoginPage extends StatelessWidget {
-  const LoginPage({super.key});
+class LoginScreen extends StatelessWidget {
+  const LoginScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -69,7 +69,7 @@ class LoginPage extends StatelessWidget {
                 onPressed: () {
                   Navigator.pushReplacement(
                     context,
-                    MaterialPageRoute(builder: (context) => const HomePage()),
+                    MaterialPageRoute(builder: (context) => const HomeScreen()),
                   );
                 },
                 style: ElevatedButton.styleFrom(
@@ -113,7 +113,7 @@ class LoginPage extends StatelessWidget {
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (_) => CadastroPage()),
+                    MaterialPageRoute(builder: (_) => RegisterScreen()),
                   );
                 },
                 style: ElevatedButton.styleFrom(

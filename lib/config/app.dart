@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_2/pages/login_page.dart';
+import 'package:flutter_application_2/ui/login/widgets/login_screen.dart';
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class App extends StatelessWidget {
+  const App({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Restaurante',
       debugShowCheckedModeBanner: false,
-      home: LoginPage(),
+      home: LoginScreen(),
     );
   }
 }

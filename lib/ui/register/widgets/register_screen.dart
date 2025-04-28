@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_2/dialog/endereco_dialog.dart';
 
-class CadastroPage extends StatefulWidget {
-  const CadastroPage({super.key});
+class RegisterScreen extends StatefulWidget {
+  const RegisterScreen({super.key});
 
   @override
-  _CadastroPageState createState() => _CadastroPageState();
+  _RegisterScreen createState() => _RegisterScreen();
 }
 
-class _CadastroPageState extends State<CadastroPage> {
+class _RegisterScreen extends State<RegisterScreen> {
   final TextEditingController enderecoController = TextEditingController();
 
   void abrirPopupEndereco() {
