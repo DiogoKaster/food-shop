@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_2/dialog/endereco_dialog.dart';
 
 class CadastroPage extends StatefulWidget {
+  const CadastroPage({super.key});
+
   @override
   _CadastroPageState createState() => _CadastroPageState();
 }
@@ -102,18 +104,21 @@ class _CadastroPageState extends State<CadastroPage> {
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
-                onPressed: () {},
-                child: Text(
-                  'Criar conta',
-                  style: TextStyle(
-                    color: const Color.fromARGB(255, 31, 123, 139),
-                  ),
-                ),
+                onPressed: () {
+                  //TODO: Validação
+                  Navigator.pop(context); //volta para tela de login
+                },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.white,
                   padding: EdgeInsets.symmetric(vertical: 16),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(8),
+                  ),
+                ),
+                child: Text(
+                  'Criar conta',
+                  style: TextStyle(
+                    color: const Color.fromARGB(255, 31, 123, 139),
                   ),
                 ),
               ),
