@@ -93,9 +93,8 @@ class LoginScreen extends StatelessWidget {
 }*/
 
 import 'package:flutter/material.dart';
-import 'package:flutter_application_2/routing/app_routes.dart'; // Certifique-se que este caminho está correto
+import 'package:flutter_application_2/routing/app_routes.dart';
 
-// 1. Converter para StatefulWidget para gerenciar estado (form key, controllers, visibilidade senha)
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
 
@@ -104,19 +103,15 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  // 2. Chave global para identificar e validar o formulário
   final _formKey = GlobalKey<FormState>();
 
-  // 3. Controladores para obter os valores dos campos
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
-  // 4. Variável para controlar a visibilidade da senha
   bool _isPasswordObscured = true;
 
   @override
   void dispose() {
-    // 5. Limpar os controladores quando o widget for descartado
     _emailController.dispose();
     _passwordController.dispose();
     super.dispose();
@@ -128,7 +123,6 @@ class _LoginScreenState extends State<LoginScreen> {
     final textTheme = Theme.of(context).textTheme;
 
     return Scaffold(
-      // Adiciona um AppBar simples para consistência visual (opcional)
       appBar: AppBar(
         title: const Text('Login'),
         centerTitle: true,
@@ -137,18 +131,14 @@ class _LoginScreenState extends State<LoginScreen> {
         elevation: 0,
       ),
       body: Center(
-        // Centraliza o conteúdo verticalmente
         child: SingleChildScrollView(
-          // Permite rolagem em telas menores
           child: Padding(
             padding: const EdgeInsets.all(24.0),
-            // 6. Envolve os campos com um widget Form
             child: Form(
-              key: _formKey, // Associa a GlobalKey ao Form
+              key: _formKey,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment:
-                    CrossAxisAlignment.stretch, // Estica os botões
+                crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   Text(
                     'Bem-vindo!',
@@ -160,33 +150,28 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   const SizedBox(height: 40),
 
-                  // --- Campo Email ---
                   _buildLabel('Email', textTheme),
                   const SizedBox(height: 8),
-                  // 7. Troca TextField por TextFormField
                   TextFormField(
-                    controller: _emailController, // Associa o controller
+                    controller: _emailController,
                     decoration: _inputDecoration(
-                      // Usa helper para decoração
                       'Digite seu E-mail',
                       Icons.email,
                       colorScheme,
                     ),
-                    keyboardType: TextInputType.emailAddress, // Define teclado
+                    keyboardType: TextInputType.emailAddress,
                     validator: (value) {
-                      // 8. Adiciona validação
                       if (value == null || value.isEmpty) {
                         return 'Campo obrigatório';
                       }
                       if (!value.contains('@') || !value.contains('.')) {
                         return 'Formato de e-mail inválido';
                       }
-                      return null; // Válido
+                      return null;
                     },
                   ),
                   const SizedBox(height: 20),
 
-                  // --- Campo Senha ---
                   _buildLabel('Senha', textTheme),
                   const SizedBox(height: 8),
                   TextFormField(
@@ -298,7 +283,7 @@ class _LoginScreenState extends State<LoginScreen> {
   ) {
     return InputDecoration(
       filled: true,
-      fillColor: colorScheme.surface, // Cor de fundo do campo
+      fillColor: colorScheme.surface,
       prefixIcon: Icon(icon, color: colorScheme.primary),
       prefixIconColor: colorScheme.primary,
       hintText: hint,

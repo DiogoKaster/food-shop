@@ -136,7 +136,7 @@ class MenuItemCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     final textTheme =
-        Theme.of(context).textTheme; // Adicionado para usar textTheme
+        Theme.of(context).textTheme; 
 
     return Scaffold(
       appBar: AppBar(
@@ -147,57 +147,38 @@ class MenuItemCard extends StatelessWidget {
       ),
       body: Column(
         crossAxisAlignment:
-            CrossAxisAlignment.start, // Alinha textos à esquerda
+            CrossAxisAlignment.start, 
         children: [
-          // --- Imagem do Restaurante ---
           Container(
             width: double.infinity,
             height: 200, // Altura da imagem
             decoration: BoxDecoration(
               image: DecorationImage(
-                // Use NetworkImage se a imagem vier da internet
-                // image: NetworkImage(restauranteImage),
                 image: AssetImage(
                   restauranteImage,
                 ), // Mantendo AssetImage conforme original
-                fit: BoxFit.cover, // Cobre toda a área do container
+                fit: BoxFit.cover, 
               ),
             ),
-            // Opcional: Adicionar um scrim/overlay para melhor legibilidade do texto sobre imagem
-            // child: Container(
-            //   decoration: BoxDecoration(
-            //     gradient: LinearGradient(
-            //       colors: [Colors.black.withOpacity(0.5), Colors.transparent],
-            //       begin: Alignment.bottomCenter,
-            //       end: Alignment.topCenter,
-            //     ),
-            //   ),
-            // ),
           ),
-          // Adiciona padding ao redor do conteúdo abaixo da imagem
           Padding(
             padding: const EdgeInsets.all(16.0),
             child: Text(
               'Cardápio', // Título da seção
               style: textTheme.headlineMedium?.copyWith(
                 fontWeight: FontWeight.bold,
-                color: colorScheme.primary, // Usa cor primária para destaque
+                color: colorScheme.primary, 
               ),
             ),
           ),
-          // Linha divisória (opcional)
-          // const Divider(height: 1, thickness: 1),
 
-          // --- Lista de Itens do Cardápio ---
           Expanded(
-            // Garante que a lista ocupe o espaço restante
             child: ListView(
               padding: const EdgeInsets.symmetric(
                 horizontal: 16,
                 vertical: 8,
-              ), // Ajusta padding da lista
+              ), 
               children: const [
-                // Seus MenuItemCard existentes
                 MenuItemCard(
                   nome: 'Marmita Tradicional',
                   descricao: 'Arroz, feijão, carne e salada',
@@ -215,36 +196,30 @@ class MenuItemCard extends StatelessWidget {
                   descricao: 'Arroz, legumes, proteína de soja e salada',
                   preco: 'R\$ 16,90',
                 ),
-                // Adicione mais itens aqui...
               ],
             ),
           ),
         ],
       ),
-      // --- Botão Flutuante para Adicionar Item ---
       floatingActionButton: FloatingActionButton.extended(
-        // Usando .extended para ter texto e ícone
         onPressed: () {
-          // TODO: Implementar a lógica para adicionar um novo item
-          // Ex: Navegar para uma tela de formulário, abrir um dialog, etc.
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
               content: Text('Ação: Adicionar novo item ao cardápio'),
             ),
           );
         },
-        label: const Text('Adicionar Item'), // Texto do botão
-        icon: const Icon(Icons.add), // Ícone do botão
+        label: const Text('Adicionar Item'), 
+        icon: const Icon(Icons.add),
         backgroundColor:
-            colorScheme.secondary, // Cor de fundo (pode ser primary também)
-        foregroundColor: colorScheme.onSecondary, // Cor do texto/ícone
-        tooltip: 'Adicionar item ao cardápio', // Dica ao pressionar e segurar
+            colorScheme.secondary, 
+        foregroundColor: colorScheme.onSecondary, 
+        tooltip: 'Adicionar item ao cardápio', 
       ),
     );
   }
 }
 
-// Classe MenuItemCard permanece a mesma
 class MenuItemCard extends StatelessWidget {
   final String nome;
   final String descricao;
@@ -266,7 +241,7 @@ class MenuItemCard extends StatelessWidget {
       elevation: 2,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(8),
-      ), // Bordas arredondadas
+      ), 
       child: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
@@ -276,7 +251,6 @@ class MenuItemCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Expanded(
-                  // Permite que o nome quebre linha se for muito longo
                   child: Text(
                     nome,
                     style: textTheme.titleMedium?.copyWith(
@@ -284,12 +258,12 @@ class MenuItemCard extends StatelessWidget {
                     ),
                   ),
                 ),
-                const SizedBox(width: 10), // Espaço entre nome e preço
+                const SizedBox(width: 10), 
                 Text(
                   preco,
                   style: textTheme.titleMedium?.copyWith(
                     fontWeight: FontWeight.bold,
-                    color: Colors.green[700], // Tom de verde mais escuro
+                    color: Colors.green[700], 
                   ),
                 ),
               ],
@@ -298,7 +272,7 @@ class MenuItemCard extends StatelessWidget {
             Text(
               descricao,
               style: textTheme.bodyMedium?.copyWith(
-                color: Colors.grey[600], // Cor mais suave para descrição
+                color: Colors.grey[600], 
               ),
             ),
           ],

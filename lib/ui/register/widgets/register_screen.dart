@@ -85,7 +85,6 @@ class _RegisterScreen extends State<RegisterScreen> {
               width: double.infinity,
               child: OutlinedButton(
                 onPressed: () {
-                  //TODO: Validação
                   Navigator.pop(context); //volta para tela de login
                 },
                 style: OutlinedButton.styleFrom(
@@ -117,32 +116,27 @@ class _RegisterScreen extends State<RegisterScreen> {
 }*/
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart'; // Import necessário para InputFormatters
+import 'package:flutter/services.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
 
   @override
-  _RegisterScreenState createState() => _RegisterScreenState(); // Corrigido nome da classe State
+  _RegisterScreenState createState() => _RegisterScreenState();
 }
 
 class _RegisterScreenState extends State<RegisterScreen> {
-  // Corrigido nome da classe State
-  // Chave global para identificar e validar o formulário
   final _formKey = GlobalKey<FormState>();
 
-  // Controladores para obter os valores dos campos
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _cpfController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
-  // Variável para controlar a visibilidade da senha
   bool _isPasswordObscured = true;
 
   @override
   void dispose() {
-    // Limpar os controladores quando o widget for descartado
     _nameController.dispose();
     _cpfController.dispose();
     _emailController.dispose();
@@ -153,15 +147,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    final textTheme =
-        Theme.of(context).textTheme; // Adicionado para usar textTheme
-
+    final textTheme = Theme.of(context).textTheme;
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
-        // automaticallyImplyLeading: true, // Botão voltar já é adicionado por padrão ao navegar
         leading: IconButton(
-          // Adiciona um botão de voltar explícito se necessário
           icon: Icon(Icons.arrow_back, color: colorScheme.onPrimary),
           onPressed: () => Navigator.of(context).pop(),
         ),
@@ -177,13 +167,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(24.0),
-        // Envolve os campos com um widget Form
         child: Form(
-          key: _formKey, // Associa a GlobalKey ao Form
+          key: _formKey,
           child: ListView(
-            // Usar ListView para evitar overflow se o teclado aparecer
             children: [
-              // --- Campo Nome ---
               _buildLabel('Nome', colorScheme),
               const SizedBox(height: 8),
               TextFormField(
@@ -194,26 +181,23 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 ),
                 keyboardType: TextInputType.name,
                 inputFormatters: [
-                  // Permite letras, espaços e acentos comuns
                   FilteringTextInputFormatter.allow(RegExp(r'[a-zA-ZÀ-ú\s]+')),
                 ],
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Campo obrigatório';
                   }
-                  // Validação básica para letras e espaços (RegExp acima já ajuda)
                   if (!RegExp(r'^[a-zA-ZÀ-ú\s]+$').hasMatch(value)) {
                     return 'Nome inválido (use apenas letras e espaços)';
                   }
                   if (value.trim().split(' ').length < 2) {
-                    return 'Digite seu nome completo'; // Exige pelo menos um espaço (nome e sobrenome)
+                    return 'Digite seu nome completo';
                   }
-                  return null; // Retorna null se válido
+                  return null;
                 },
               ),
               const SizedBox(height: 20),
 
-              // --- Campo CPF ---
               _buildLabel('CPF', colorScheme),
               const SizedBox(height: 8),
               TextFormField(
@@ -224,9 +208,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 ),
                 keyboardType: TextInputType.number,
                 inputFormatters: [
-                  FilteringTextInputFormatter
-                      .digitsOnly, // Permite apenas dígitos
-                  LengthLimitingTextInputFormatter(11), // Limita a 11 dígitos
+                  FilteringTextInputFormatter.digitsOnly,
+                  LengthLimitingTextInputFormatter(11),
                 ],
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -235,13 +218,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   if (value.length != 11) {
                     return 'CPF deve conter 11 dígitos';
                   }
-                  // Validação mais robusta de CPF pode ser adicionada aqui
                   return null;
                 },
               ),
               const SizedBox(height: 20),
 
-              // --- Campo Email ---
               _buildLabel('Email', colorScheme),
               const SizedBox(height: 8),
               TextFormField(
@@ -252,8 +233,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   if (value == null || value.isEmpty) {
                     return 'Campo obrigatório';
                   }
-                  // Validação simples de email (verifica se contém '@' e '.')
-                  // Uma validação mais robusta com RegExp é recomendada para produção
                   if (!value.contains('@') || !value.contains('.')) {
                     return 'Formato de e-mail inválido';
                   }
@@ -262,17 +241,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
               ),
               const SizedBox(height: 20),
 
-              // --- Campo Senha ---
               _buildLabel('Senha', colorScheme),
               const SizedBox(height: 8),
               TextFormField(
                 controller: _passwordController,
-                obscureText: _isPasswordObscured, // Controla visibilidade
+                obscureText: _isPasswordObscured,
                 decoration: inputDecoration(
                   'Digite sua senha',
                   Icons.lock,
                 ).copyWith(
-                  // Adiciona botão para mostrar/ocultar senha
                   suffixIcon: IconButton(
                     icon: Icon(
                       _isPasswordObscured
@@ -292,27 +269,19 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   if (value == null || value.isEmpty) {
                     return 'Campo obrigatório';
                   }
-                  // Validação de senha (mínimo 6 caracteres)
                   if (value.length < 6) {
                     return 'Senha deve ter no mínimo 6 caracteres';
                   }
-                  // Validações adicionais (letras maiúsculas, números, símbolos) podem ser adicionadas
                   return null;
                 },
               ),
               const SizedBox(height: 30),
 
-              // --- Botão Criar Conta ---
               SizedBox(
                 width: double.infinity,
                 child: OutlinedButton(
                   onPressed: () {
-                    // Verifica se o formulário é válido
                     if (_formKey.currentState!.validate()) {
-                      // Se for válido, processa os dados
-                      // _formKey.currentState!.save(); // Chama onSaved em cada TextFormField (se definido)
-
-                      // Aqui você pode pegar os dados dos controllers:
                       String name = _nameController.text;
                       String cpf = _cpfController.text;
                       String email = _emailController.text;
@@ -344,11 +313,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           content: Text('Cadastro iniciado (simulação)'),
                         ),
                       );
-                      Navigator.pop(
-                        context,
-                      ); // Mantém o comportamento original por enquanto
+                      Navigator.pop(context);
                     } else {
-                      // Se inválido, mostra mensagens de erro automaticamente nos campos
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
                           content: Text(
@@ -362,7 +328,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     backgroundColor: colorScheme.primary,
                     padding: const EdgeInsets.symmetric(vertical: 16),
                     shape: RoundedRectangleBorder(
-                      // Garante bordas arredondadas consistentes
                       borderRadius: BorderRadius.circular(8),
                     ),
                   ),
@@ -371,7 +336,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     style: TextStyle(
                       color: colorScheme.onPrimary,
                       fontSize: 16,
-                    ), // Aumenta um pouco a fonte
+                    ),
                   ),
                 ),
               ),
@@ -382,13 +347,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
     );
   }
 
-  // Widget helper para criar os rótulos dos campos
   Widget _buildLabel(String text, ColorScheme colorScheme) {
     return Align(
       alignment: Alignment.centerLeft,
       child: Text(
         text,
-        // Considerar usar onSurface ou uma cor mais escura se o fundo for claro
         style: TextStyle(
           color: colorScheme.onSurface.withOpacity(0.7),
           fontWeight: FontWeight.w500,
@@ -397,55 +360,35 @@ class _RegisterScreenState extends State<RegisterScreen> {
     );
   }
 
-  // Função helper para InputDecoration (mantida como estava)
   InputDecoration inputDecoration(String hint, IconData icon) {
     final colorScheme = Theme.of(context).colorScheme;
     return InputDecoration(
       filled: true,
-      fillColor:
-          colorScheme
-              .surface, // Usar surface ou background pode ser melhor que onPrimary
-      //fillColor: Theme.of(context).colorScheme.onPrimary, // Cor original
+      fillColor: colorScheme.surface,
       prefixIcon: Icon(icon),
       prefixIconColor: colorScheme.primary,
       hintText: hint,
-      hintStyle: TextStyle(
-        color: Colors.grey[500],
-      ), // Cor mais suave para o hint
-      // Estilo da borda padrão
+      hintStyle: TextStyle(color: Colors.grey[500]),
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(8),
-        borderSide: BorderSide(color: Colors.grey[400]!), // Borda sutil
+        borderSide: BorderSide(color: Colors.grey[400]!),
       ),
-      // Estilo da borda quando o campo está habilitado (não focado)
       enabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(8),
         borderSide: BorderSide(color: Colors.grey[400]!),
       ),
-      // Estilo da borda quando o campo está focado
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(8),
-        borderSide: BorderSide(
-          color: colorScheme.primary,
-          width: 2.0,
-        ), // Destaca com cor primária
+        borderSide: BorderSide(color: colorScheme.primary, width: 2.0),
       ),
-      // Estilo da borda quando há erro
       errorBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(8),
-        borderSide: BorderSide(
-          color: colorScheme.error,
-          width: 1.0,
-        ), // Borda vermelha
+        borderSide: BorderSide(color: colorScheme.error, width: 1.0),
       ),
       focusedErrorBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(8),
-        borderSide: BorderSide(
-          color: colorScheme.error,
-          width: 2.0,
-        ), // Borda vermelha mais grossa
+        borderSide: BorderSide(color: colorScheme.error, width: 2.0),
       ),
-      // Adiciona um pouco de padding interno
       contentPadding: const EdgeInsets.symmetric(
         vertical: 15.0,
         horizontal: 10.0,
