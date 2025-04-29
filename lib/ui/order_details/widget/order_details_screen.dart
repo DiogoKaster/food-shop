@@ -4,10 +4,7 @@ import 'package:flutter_application_2/models/models.dart';
 class OrderDetailsScreen extends StatelessWidget {
   final Pedido pedido;
 
-  const OrderDetailsScreen({
-    Key? key,
-    required this.pedido,
-  }) : super(key: key);
+  const OrderDetailsScreen({super.key, required this.pedido});
 
   @override
   Widget build(BuildContext context) {
@@ -41,7 +38,7 @@ class OrderDetailsScreen extends StatelessWidget {
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 16),
-            ...pedido.itens.map((item) => OrderItemCard(item: item)).toList(),
+            ...pedido.itens.map((item) => OrderItemCard(item: item)),
 
             const SizedBox(height: 24),
 
@@ -73,7 +70,9 @@ class OrderDetailsScreen extends StatelessWidget {
                   // Implementar lógica para solicitar ajuda
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
-                      content: Text('Ajuda solicitada. Entraremos em contato em breve.'),
+                      content: Text(
+                        'Ajuda solicitada. Entraremos em contato em breve.',
+                      ),
                     ),
                   );
                 },
@@ -90,10 +89,7 @@ class OrderDetailsScreen extends StatelessWidget {
 class RestauranteHeader extends StatelessWidget {
   final Restaurante restaurante;
 
-  const RestauranteHeader({
-    Key? key,
-    required this.restaurante,
-  }) : super(key: key);
+  const RestauranteHeader({super.key, required this.restaurante});
 
   @override
   Widget build(BuildContext context) {
@@ -129,10 +125,7 @@ class RestauranteHeader extends StatelessWidget {
                   const SizedBox(width: 4),
                   Text(
                     'Ligar para o restaurante',
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: Colors.blue[700],
-                    ),
+                    style: TextStyle(fontSize: 14, color: Colors.blue[700]),
                   ),
                 ],
               ),
@@ -147,10 +140,7 @@ class RestauranteHeader extends StatelessWidget {
 class StatusSection extends StatelessWidget {
   final Pedido pedido;
 
-  const StatusSection({
-    Key? key,
-    required this.pedido,
-  }) : super(key: key);
+  const StatusSection({super.key, required this.pedido});
 
   @override
   Widget build(BuildContext context) {
@@ -190,10 +180,7 @@ class StatusSection extends StatelessWidget {
           const SizedBox(height: 8),
           Text(
             'Pedido realizado em ${pedido.dataFormatada}',
-            style: TextStyle(
-              fontSize: 12,
-              color: Colors.grey[600],
-            ),
+            style: TextStyle(fontSize: 12, color: Colors.grey[600]),
           ),
         ],
       ),
@@ -217,10 +204,7 @@ class StatusSection extends StatelessWidget {
 class OrderItemCard extends StatelessWidget {
   final ItemPedido item;
 
-  const OrderItemCard({
-    Key? key,
-    required this.item,
-  }) : super(key: key);
+  const OrderItemCard({super.key, required this.item});
 
   @override
   Widget build(BuildContext context) {
@@ -258,10 +242,7 @@ class OrderItemCard extends StatelessWidget {
                   const SizedBox(height: 4),
                   Text(
                     item.produto.descricao,
-                    style: TextStyle(
-                      fontSize: 12,
-                      color: Colors.grey[600],
-                    ),
+                    style: TextStyle(fontSize: 12, color: Colors.grey[600]),
                   ),
                 ],
               ),
@@ -269,10 +250,7 @@ class OrderItemCard extends StatelessWidget {
             const SizedBox(width: 8),
             Text(
               'R\$ ${item.subtotal.toStringAsFixed(2).replaceAll('.', ',')}',
-              style: const TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.bold,
-              ),
+              style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
             ),
           ],
         ),
@@ -284,10 +262,7 @@ class OrderItemCard extends StatelessWidget {
 class OrderSummary extends StatelessWidget {
   final Pedido pedido;
 
-  const OrderSummary({
-    Key? key,
-    required this.pedido,
-  }) : super(key: key);
+  const OrderSummary({super.key, required this.pedido});
 
   @override
   Widget build(BuildContext context) {
@@ -304,9 +279,15 @@ class OrderSummary extends StatelessWidget {
       ),
       child: Column(
         children: [
-          _buildSummaryRow('Subtotal', 'R\$ ${subtotal.toStringAsFixed(2).replaceAll('.', ',')}'),
+          _buildSummaryRow(
+            'Subtotal',
+            'R\$ ${subtotal.toStringAsFixed(2).replaceAll('.', ',')}',
+          ),
           const SizedBox(height: 8),
-          _buildSummaryRow('Taxa de entrega', 'R\$ ${taxaEntrega.toStringAsFixed(2).replaceAll('.', ',')}'),
+          _buildSummaryRow(
+            'Taxa de entrega',
+            'R\$ ${taxaEntrega.toStringAsFixed(2).replaceAll('.', ',')}',
+          ),
           const SizedBox(height: 8),
           const Divider(),
           const SizedBox(height: 8),
@@ -344,7 +325,7 @@ class OrderSummary extends StatelessWidget {
 }
 
 class DeliveryInfo extends StatelessWidget {
-  const DeliveryInfo({Key? key}) : super(key: key);
+  const DeliveryInfo({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -357,11 +338,19 @@ class DeliveryInfo extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _buildInfoRow(Icons.location_on, 'Endereço de entrega', 'Rua Exemplo, 123 - Bairro - Cidade'),
+          _buildInfoRow(
+            Icons.location_on,
+            'Endereço de entrega',
+            'Rua Exemplo, 123 - Bairro - Cidade',
+          ),
           const SizedBox(height: 16),
           _buildInfoRow(Icons.access_time, 'Tempo estimado', '30-45 minutos'),
           const SizedBox(height: 16),
-          _buildInfoRow(Icons.payment, 'Forma de pagamento', 'Cartão de crédito - final 1234'),
+          _buildInfoRow(
+            Icons.payment,
+            'Forma de pagamento',
+            'Cartão de crédito - final 1234',
+          ),
         ],
       ),
     );
@@ -387,10 +376,7 @@ class DeliveryInfo extends StatelessWidget {
               const SizedBox(height: 4),
               Text(
                 content,
-                style: TextStyle(
-                  fontSize: 14,
-                  color: Colors.grey[700],
-                ),
+                style: TextStyle(fontSize: 14, color: Colors.grey[700]),
               ),
             ],
           ),

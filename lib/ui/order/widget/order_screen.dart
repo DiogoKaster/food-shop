@@ -1,26 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_2/models/models.dart';
-import 'package:flutter_application_2/nav_bar/nav_bar.dart';
+import 'package:flutter_application_2/ui/core/ui/nav_bar.dart';
 import 'package:flutter_application_2/ui/home/widgets/home_screen.dart';
 import 'package:flutter_application_2/ui/profile/widget/profile_screen.dart';
 import 'package:flutter_application_2/ui/search/widget/search_screen.dart';
-import 'package:flutter_application_2/ui/order/widget/order_details_screen.dart';
+import 'package:flutter_application_2/ui/order_details/widget/order_details_screen.dart';
 
 class OrderScreen extends StatefulWidget {
-  const OrderScreen({Key? key}) : super(key: key);
+  const OrderScreen({super.key});
 
   @override
   State<OrderScreen> createState() => _OrderScreenState();
 }
 
 class _OrderScreenState extends State<OrderScreen> {
-  int _selectedIndex = 2;
+  final int _selectedIndex = 2;
   List<Pedido> _pedidos = [];
 
   @override
   void initState() {
     super.initState();
-    // Obtém os pedidos do usuário do mock service
     _pedidos = MockDataService.getPedidosDoUsuario();
   }
 
@@ -66,31 +65,33 @@ class _OrderScreenState extends State<OrderScreen> {
         backgroundColor: colorScheme.primary,
         foregroundColor: colorScheme.onPrimary,
       ),
-      body: _pedidos.isEmpty
-          ? const Center(
-        child: Text(
-          'Você ainda não possui pedidos.',
-          style: TextStyle(fontSize: 16),
-        ),
-      )
-          : ListView.builder(
-        itemCount: _pedidos.length,
-        padding: const EdgeInsets.all(16),
-        itemBuilder: (context, index) {
-          final pedido = _pedidos[index];
-          return OrderCard(
-            pedido: pedido,
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => OrderDetailsScreen(pedido: pedido),
+      body:
+          _pedidos.isEmpty
+              ? const Center(
+                child: Text(
+                  'Você ainda não possui pedidos.',
+                  style: TextStyle(fontSize: 16),
                 ),
-              );
-            },
-          );
-        },
-      ),
+              )
+              : ListView.builder(
+                itemCount: _pedidos.length,
+                padding: const EdgeInsets.all(16),
+                itemBuilder: (context, index) {
+                  final pedido = _pedidos[index];
+                  return OrderCard(
+                    pedido: pedido,
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder:
+                              (context) => OrderDetailsScreen(pedido: pedido),
+                        ),
+                      );
+                    },
+                  );
+                },
+              ),
       bottomNavigationBar: CustomBottomNavBar(
         currentIndex: _selectedIndex,
         onTap: _onItemTapped,
@@ -103,11 +104,7 @@ class OrderCard extends StatelessWidget {
   final Pedido pedido;
   final VoidCallback onTap;
 
-  const OrderCard({
-    Key? key,
-    required this.pedido,
-    required this.onTap,
-  }) : super(key: key);
+  const OrderCard({super.key, required this.pedido, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -193,7 +190,10 @@ class OrderCard extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 8,
+                      vertical: 4,
+                    ),
                     decoration: BoxDecoration(
                       color: pedido.getStatusColor().withOpacity(0.2),
                       borderRadius: BorderRadius.circular(4),

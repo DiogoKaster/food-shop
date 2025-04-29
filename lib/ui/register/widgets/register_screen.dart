@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_2/ui/register/widgets/address_dialog.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -10,21 +9,6 @@ class RegisterScreen extends StatefulWidget {
 
 class _RegisterScreen extends State<RegisterScreen> {
   final TextEditingController enderecoController = TextEditingController();
-
-  void abrirPopupEndereco() {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return EnderecoDialog(
-          onEnderecoPreenchido: (String enderecoCompleto) {
-            setState(() {
-              enderecoController.text = enderecoCompleto;
-            });
-          },
-        );
-      },
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -70,27 +54,6 @@ class _RegisterScreen extends State<RegisterScreen> {
             SizedBox(height: 8),
             TextField(
               decoration: inputDecoration('Digite seu CPF', Icons.badge),
-            ),
-            SizedBox(height: 20),
-            Align(
-              alignment: Alignment.centerLeft,
-              child: Text(
-                'Endereço',
-                style: TextStyle(color: colorScheme.onPrimary),
-              ),
-            ),
-            SizedBox(height: 8),
-            GestureDetector(
-              onTap: abrirPopupEndereco,
-              child: AbsorbPointer(
-                child: TextField(
-                  controller: enderecoController,
-                  decoration: inputDecoration(
-                    'Digite seu Endereço',
-                    Icons.home,
-                  ),
-                ),
-              ),
             ),
             SizedBox(height: 20),
             Align(

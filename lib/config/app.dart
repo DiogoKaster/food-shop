@@ -10,7 +10,7 @@ class App extends StatelessWidget {
       title: 'Restaurante',
       debugShowCheckedModeBanner: false,
       initialRoute: AppRoutes.login,
-      routes: AppRoutes.routes,
+      routes: AppRoutes.getRoutes(),
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepOrange),
       ),
