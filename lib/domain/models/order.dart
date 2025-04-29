@@ -1,9 +1,14 @@
+enum DeliveryType { standard, express }
+
+enum OrderStatus { preparing, inDelivery, delivered, cancelled }
+
 class Order {
   final int? id;
   final int userId;
+  final int restaurantId;
   final int userAddressId;
-  final String deliveryType;
-  final String status;
+  final DeliveryType deliveryType;
+  final OrderStatus status;
   final double totalPrice;
   final DateTime? paidAt;
   final DateTime? createdAt;
@@ -12,6 +17,7 @@ class Order {
   Order({
     this.id,
     required this.userId,
+    required this.restaurantId,
     required this.userAddressId,
     required this.deliveryType,
     required this.status,
@@ -24,9 +30,10 @@ class Order {
   Order copyWith({
     int? id,
     int? userId,
+    int? restaurantId,
     int? userAddressId,
-    String? deliveryType,
-    String? status,
+    DeliveryType? deliveryType,
+    OrderStatus? status,
     double? totalPrice,
     DateTime? paidAt,
     DateTime? createdAt,
@@ -35,6 +42,7 @@ class Order {
     return Order(
       id: id ?? this.id,
       userId: userId ?? this.userId,
+      restaurantId: restaurantId ?? this.restaurantId,
       userAddressId: userAddressId ?? this.userAddressId,
       deliveryType: deliveryType ?? this.deliveryType,
       status: status ?? this.status,

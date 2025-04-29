@@ -12,6 +12,55 @@ class InMemoryOrderRepository implements OrderRepository {
   final List<Order> _orders = [];
   var _nextId = 1;
 
+  InMemoryOrderRepository() {
+    _mockOrders();
+  }
+
+  void _mockOrders() {
+    _orders.addAll([
+      Order(
+        id: _nextId++,
+        userId: 1,
+        restaurantId: 1,
+        userAddressId: 1,
+        deliveryType: DeliveryType.standard,
+        status: OrderStatus.preparing,
+        totalPrice: 50.0,
+        paidAt: DateTime.now().subtract(Duration(hours: 1)),
+      ),
+      Order(
+        id: _nextId++,
+        userId: 1,
+        userAddressId: 1,
+        restaurantId: 2,
+        deliveryType: DeliveryType.express,
+        status: OrderStatus.inDelivery,
+        totalPrice: 75.0,
+        paidAt: DateTime.now().subtract(Duration(days: 1)),
+      ),
+      Order(
+        id: _nextId++,
+        userId: 1,
+        restaurantId: 3,
+        userAddressId: 1,
+        deliveryType: DeliveryType.standard,
+        status: OrderStatus.delivered,
+        totalPrice: 40.0,
+        paidAt: DateTime.now().subtract(Duration(days: 3)),
+      ),
+      Order(
+        id: _nextId++,
+        userId: 1,
+        restaurantId: 4,
+        userAddressId: 1,
+        deliveryType: DeliveryType.standard,
+        status: OrderStatus.cancelled,
+        totalPrice: 20.0,
+        paidAt: DateTime.now().subtract(Duration(days: 7)),
+      ),
+    ]);
+  }
+
   @override
   Future<Order?> getById(int id) async {
     return _orders.firstWhere((o) => o.id == id);
@@ -24,17 +73,7 @@ class InMemoryOrderRepository implements OrderRepository {
 
   @override
   Future<Order> create(Order order) async {
-    final newOrder = Order(
-      id: _nextId++,
-      userId: order.userId,
-      userAddressId: order.userAddressId,
-      deliveryType: order.deliveryType,
-      status: order.status,
-      totalPrice: order.totalPrice,
-      paidAt: order.paidAt,
-      createdAt: DateTime.now(),
-      updatedAt: DateTime.now(),
-    );
+    final newOrder = order.copyWith(id: _nextId++, createdAt: DateTime.now());
 
     _orders.add(newOrder);
     return newOrder;

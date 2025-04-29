@@ -4,7 +4,7 @@ import 'package:flutter_application_2/ui/core/ui/nav_bar.dart';
 import 'package:flutter_application_2/ui/home/widgets/home_screen.dart';
 import 'package:flutter_application_2/ui/profile/widget/profile_screen.dart';
 import 'package:flutter_application_2/ui/search/widget/search_screen.dart';
-import 'package:flutter_application_2/ui/order/widget/order_details_screen.dart';
+import 'package:flutter_application_2/ui/order_details/widget/order_details_screen.dart';
 
 class OrderScreen extends StatefulWidget {
   const OrderScreen({super.key});
@@ -20,7 +20,6 @@ class _OrderScreenState extends State<OrderScreen> {
   @override
   void initState() {
     super.initState();
-    // Obtém os pedidos do usuário do mock service
     _pedidos = MockDataService.getPedidosDoUsuario();
   }
 

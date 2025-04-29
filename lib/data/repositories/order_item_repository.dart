@@ -12,6 +12,19 @@ class InMemoryOrderItemRepository implements OrderItemRepository {
   final List<OrderItem> _items = [];
   var _nextId = 1;
 
+  InMemoryOrderItemRepository() {
+    _mockOrderItem();
+  }
+
+  void _mockOrderItem() {
+    _items.addAll([
+      OrderItem(orderId: 1, productId: 1, quantity: 2),
+      OrderItem(orderId: 1, productId: 2, quantity: 1),
+      OrderItem(orderId: 2, productId: 3, quantity: 3),
+      OrderItem(orderId: 3, productId: 4, quantity: 3),
+    ]);
+  }
+
   @override
   Future<OrderItem?> getById(int id) async {
     return _items.firstWhere((o) => o.id == id);
@@ -24,15 +37,7 @@ class InMemoryOrderItemRepository implements OrderItemRepository {
 
   @override
   Future<OrderItem> create(OrderItem item) async {
-    final newItem = OrderItem(
-      id: _nextId++,
-      orderId: item.orderId,
-      productId: item.productId,
-      quantity: item.quantity,
-      unitPrice: item.unitPrice,
-      createdAt: DateTime.now(),
-      updatedAt: DateTime.now(),
-    );
+    final newItem = item.copyWith(id: _nextId++, createdAt: DateTime.now());
 
     _items.add(newItem);
     return newItem;

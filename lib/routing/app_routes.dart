@@ -10,10 +10,12 @@ class AppRoutes {
   static const home = '/home';
   static const menu = '/menu';
 
-  static Map<String, WidgetBuilder> routes = {
-    login: (context) => LoginScreen(),
-    register: (context) => RegisterScreen(),
-    home: (context) => HomeScreen(),
-    menu: (context) => MenuScreen(restauranteName: '', restauranteImage: '',),
-  };
+  static Map<String, WidgetBuilder> getRoutes() {
+    return {
+      login: (context) => LoginScreen(),
+      register: (context) => RegisterScreen(),
+      home: (context) => HomeScreen(),
+      menu: (context) => MenuScreen(restauranteName: '', restauranteImage: ''),
+    };
+  }
 }
