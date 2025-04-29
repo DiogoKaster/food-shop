@@ -9,7 +9,7 @@ class Restaurant {
   final String state;
   final String zipCode;
   final String complement;
-  final String? brand;
+  final String brand;
   final DateTime? createdAt;
   final DateTime? updatedAt;
 
@@ -24,7 +24,7 @@ class Restaurant {
     required this.state,
     required this.zipCode,
     required this.complement,
-    this.brand,
+    required this.brand,
     this.createdAt,
     this.updatedAt,
   });

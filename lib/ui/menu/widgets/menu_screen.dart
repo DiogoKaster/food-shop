@@ -36,10 +36,7 @@ class MenuScreen extends StatelessWidget {
           const SizedBox(height: 20),
           Text(
             'Cardápio de $restauranteName',
-            style: const TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-            ),
+            style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 20),
           // Aqui você pode adicionar mais informações do restaurante e seu menu
@@ -118,10 +115,7 @@ class MenuItemCard extends StatelessWidget {
             const SizedBox(height: 8),
             Text(
               descricao,
-              style: const TextStyle(
-                fontSize: 14,
-                color: Colors.grey,
-              ),
+              style: const TextStyle(fontSize: 14, color: Colors.grey),
             ),
           ],
         ),
