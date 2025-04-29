@@ -127,6 +127,18 @@ class _HomeScreenState extends State<HomeScreen> {
     {'nome': 'Crazyfood - Marmita & Marmitex', 'imagem': 'assets/litecoin.png'},
     {'nome': 'Restaurante Elite - Centro', 'imagem': 'assets/usdcoin.png'},
     {'nome': 'Casa da Vó', 'imagem': 'assets/xrp.png'},
+    {'nome': 'Marmitas Mamma-mia', 'imagem': 'assets/bitcoin.png'},
+    {'nome': 'My Mita - Refeições Express', 'imagem': 'assets/cardano.png'},
+    {'nome': 'Sr Marmita', 'imagem': 'assets/ethereum.png'},
+    {'nome': 'Crazyfood - Marmita & Marmitex', 'imagem': 'assets/litecoin.png'},
+    {'nome': 'Restaurante Elite - Centro', 'imagem': 'assets/usdcoin.png'},
+    {'nome': 'Casa da Vó', 'imagem': 'assets/xrp.png'},
+    {'nome': 'Marmitas Mamma-mia', 'imagem': 'assets/bitcoin.png'},
+    {'nome': 'My Mita - Refeições Express', 'imagem': 'assets/cardano.png'},
+    {'nome': 'Sr Marmita', 'imagem': 'assets/ethereum.png'},
+    {'nome': 'Crazyfood - Marmita & Marmitex', 'imagem': 'assets/litecoin.png'},
+    {'nome': 'Restaurante Elite - Centro', 'imagem': 'assets/usdcoin.png'},
+    {'nome': 'Casa da Vó', 'imagem': 'assets/xrp.png'},
   ];
 
   void _onItemTapped(int index) {
@@ -179,7 +191,11 @@ class _HomeScreenState extends State<HomeScreen> {
             onTap: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => MenuScreen()),
+                MaterialPageRoute(
+                  builder:
+                      (context) =>
+                          MenuScreen(nomeRestaurante: restaurante['nome']!),
+                ),
               );
             },
             child: Padding(
