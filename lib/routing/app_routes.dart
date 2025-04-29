@@ -14,6 +14,6 @@ class AppRoutes {
     login: (context) => LoginScreen(),
     register: (context) => RegisterScreen(),
     home: (context) => HomeScreen(),
-    menu: (context) => MenuScreen(),
+    menu: (context) => MenuScreen(restauranteName: '', restauranteImage: '',),
   };
 }
