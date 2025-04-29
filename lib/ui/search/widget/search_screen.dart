@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_2/nav_bar/nav_bar.dart';
+import 'package:flutter_application_2/ui/core/ui/nav_bar.dart';
 import 'package:flutter_application_2/ui/home/widgets/home_screen.dart';
 import 'package:flutter_application_2/ui/order/widget/order_screen.dart';
 import 'package:flutter_application_2/ui/profile/widget/profile_screen.dart';
 
 class SearchScreen extends StatefulWidget {
-  const SearchScreen({Key? key}) : super(key: key);
+  const SearchScreen({super.key});
 
   @override
   State<SearchScreen> createState() => _SearchScreenState();
 }
 
 class _SearchScreenState extends State<SearchScreen> {
-  int _selectedIndex = 1;
+  final int _selectedIndex = 1;
 
   void _onItemTapped(int index) {
     if (index == _selectedIndex) return;

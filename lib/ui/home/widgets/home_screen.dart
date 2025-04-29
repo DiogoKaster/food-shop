@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_2/nav_bar/nav_bar.dart';
+import 'package:flutter_application_2/ui/core/ui/nav_bar.dart';
 import 'package:flutter_application_2/ui/menu/widgets/menu_screen.dart';
 import 'package:flutter_application_2/ui/order/widget/order_screen.dart';
 import 'package:flutter_application_2/ui/profile/widget/profile_screen.dart';
 import 'package:flutter_application_2/ui/search/widget/search_screen.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({Key? key}) : super(key: key);
+  const HomeScreen({super.key});
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  int _selectedIndex = 0;
+  final int _selectedIndex = 0;
 
   final List<Map<String, String>> restaurantes = [
     {'nome': 'Marmitas Mamma-mia', 'imagem': 'assets/bitcoin.png'},
@@ -75,10 +75,11 @@ class _HomeScreenState extends State<HomeScreen> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => MenuScreen(
-                    restauranteName: restaurante['nome']!,
-                    restauranteImage: restaurante['imagem']!,
-                  ),
+                  builder:
+                      (context) => MenuScreen(
+                        restauranteName: restaurante['nome']!,
+                        restauranteImage: restaurante['imagem']!,
+                      ),
                 ),
               );
             },

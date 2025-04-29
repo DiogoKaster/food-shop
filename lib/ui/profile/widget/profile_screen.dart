@@ -1,21 +1,22 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_2/nav_bar/nav_bar.dart'; // Verifique se este caminho está correto
+import 'package:flutter_application_2/ui/core/ui/nav_bar.dart'; // Verifique se este caminho está correto
 import 'package:flutter_application_2/ui/home/widgets/home_screen.dart'; // Verifique se este caminho está correto
 import 'package:flutter_application_2/ui/order/widget/order_screen.dart'; // Verifique se este caminho está correto
 import 'package:flutter_application_2/ui/search/widget/search_screen.dart'; // Verifique se este caminho está correto
 
 class ProfileScreen extends StatefulWidget {
-  const ProfileScreen({Key? key}) : super(key: key);
+  const ProfileScreen({super.key});
 
   @override
   State<ProfileScreen> createState() => _ProfileScreenState();
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-  int _selectedIndex = 3; // Índice 3 corresponde ao Perfil
+  final int _selectedIndex = 3; // Índice 3 corresponde ao Perfil
 
   void _onItemTapped(int index) {
-    if (index == _selectedIndex) return; // Não faz nada se clicar no item já selecionado
+    if (index == _selectedIndex)
+      return; // Não faz nada se clicar no item já selecionado
 
     // Lógica de navegação baseada no índice clicado
     switch (index) {
@@ -38,8 +39,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
         );
         break;
       case 3:
-      // Já estamos na tela de perfil, tecnicamente não precisaria recarregar,
-      // mas mantendo a lógica original para consistência.
+        // Já estamos na tela de perfil, tecnicamente não precisaria recarregar,
+        // mas mantendo a lógica original para consistência.
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) => const ProfileScreen()),
@@ -51,7 +52,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
   // --- Dados Mockados ---
   final String _userName = "Usuário Exemplo";
   final String _userEmail = "usuario.exemplo@email.com";
-  final String _profileImageUrl = "https://via.placeholder.com/150"; // URL de imagem placeholder
+  final String _profileImageUrl =
+      "https://via.placeholder.com/150"; // URL de imagem placeholder
 
   @override
   Widget build(BuildContext context) {
@@ -63,9 +65,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
         title: const Text('Perfil'), // Título da AppBar
         centerTitle: true, // Centraliza o título
         backgroundColor: colorScheme.primary, // Cor de fundo da AppBar
-        foregroundColor: colorScheme.onPrimary, // Cor do texto e ícones na AppBar
+        foregroundColor:
+            colorScheme.onPrimary, // Cor do texto e ícones na AppBar
       ),
-      body: ListView( // Usar ListView permite rolagem se o conteúdo for grande
+      body: ListView(
+        // Usar ListView permite rolagem se o conteúdo for grande
         padding: const EdgeInsets.all(16.0), // Espaçamento interno geral
         children: <Widget>[
           // --- Seção de Informações do Usuário ---
@@ -74,30 +78,42 @@ class _ProfileScreenState extends State<ProfileScreen> {
               children: [
                 CircleAvatar(
                   radius: 50, // Tamanho do avatar
-                  backgroundImage: NetworkImage(_profileImageUrl), // Imagem de fundo do avatar
-                  backgroundColor: Colors.grey[300], // Cor de fundo caso a imagem falhe
+                  backgroundImage: NetworkImage(
+                    _profileImageUrl,
+                  ), // Imagem de fundo do avatar
+                  backgroundColor:
+                      Colors.grey[300], // Cor de fundo caso a imagem falhe
                 ),
                 const SizedBox(height: 16.0), // Espaçamento vertical
                 Text(
                   _userName,
-                  style: textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.bold), // Estilo do nome
+                  style: textTheme.headlineSmall?.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ), // Estilo do nome
                 ),
                 const SizedBox(height: 4.0), // Espaçamento vertical
                 Text(
                   _userEmail,
-                  style: textTheme.bodyMedium?.copyWith(color: Colors.grey[600]), // Estilo do email
+                  style: textTheme.bodyMedium?.copyWith(
+                    color: Colors.grey[600],
+                  ), // Estilo do email
                 ),
               ],
             ),
           ),
 
           const SizedBox(height: 32.0), // Espaçamento maior antes das opções
-
           // --- Seção de Opções ---
           ListTile(
-            leading: Icon(Icons.edit, color: colorScheme.primary), // Ícone de editar
+            leading: Icon(
+              Icons.edit,
+              color: colorScheme.primary,
+            ), // Ícone de editar
             title: const Text('Editar Perfil'), // Texto da opção
-            trailing: const Icon(Icons.arrow_forward_ios, size: 16), // Seta indicativa
+            trailing: const Icon(
+              Icons.arrow_forward_ios,
+              size: 16,
+            ), // Seta indicativa
             onTap: () {
               // TODO: Implementar navegação para a tela de edição de perfil
               ScaffoldMessenger.of(context).showSnackBar(
@@ -107,7 +123,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
           ),
           const Divider(), // Linha divisória
           ListTile(
-            leading: Icon(Icons.settings, color: colorScheme.primary), // Ícone de configurações
+            leading: Icon(
+              Icons.settings,
+              color: colorScheme.primary,
+            ), // Ícone de configurações
             title: const Text('Configurações'),
             trailing: const Icon(Icons.arrow_forward_ios, size: 16),
             onTap: () {
@@ -119,7 +138,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
           ),
           const Divider(),
           ListTile(
-            leading: Icon(Icons.notifications, color: colorScheme.primary), // Ícone de notificações
+            leading: Icon(
+              Icons.notifications,
+              color: colorScheme.primary,
+            ), // Ícone de notificações
             title: const Text('Notificações'),
             trailing: const Icon(Icons.arrow_forward_ios, size: 16),
             onTap: () {
@@ -131,7 +153,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
           ),
           const Divider(),
           ListTile(
-            leading: Icon(Icons.help_outline, color: colorScheme.primary), // Ícone de ajuda
+            leading: Icon(
+              Icons.help_outline,
+              color: colorScheme.primary,
+            ), // Ícone de ajuda
             title: const Text('Ajuda & Suporte'),
             trailing: const Icon(Icons.arrow_forward_ios, size: 16),
             onTap: () {
@@ -143,16 +168,21 @@ class _ProfileScreenState extends State<ProfileScreen> {
           ),
           const Divider(),
           ListTile(
-            leading: Icon(Icons.logout, color: Colors.red[700]), // Ícone de sair (vermelho)
+            leading: Icon(
+              Icons.logout,
+              color: Colors.red[700],
+            ), // Ícone de sair (vermelho)
             title: Text(
               'Sair',
-              style: TextStyle(color: Colors.red[700]), // Texto "Sair" em vermelho
+              style: TextStyle(
+                color: Colors.red[700],
+              ), // Texto "Sair" em vermelho
             ),
             onTap: () {
               // TODO: Implementar lógica de logout (limpar dados, navegar para login)
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Ação: Sair')),
-              );
+              ScaffoldMessenger.of(
+                context,
+              ).showSnackBar(const SnackBar(content: Text('Ação: Sair')));
               // Exemplo: Navegar para uma tela de login após o logout
               // Navigator.of(context).pushAndRemoveUntil(
               //   MaterialPageRoute(builder: (context) => LoginScreen()), // Substitua por sua tela de login

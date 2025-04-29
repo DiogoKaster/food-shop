@@ -11,48 +11,74 @@ abstract class UserRepository {
 }
 
 class InMemoryUserRepository implements UserRepository {
-  // final List<User> _users = [];
-  // final int _nextId = 1;
+  final List<User> _users = [];
+  int _nextId = 1;
 
   @override
-  Future<User?> getById(int id) {
-    // TODO: implement getUserById
-    throw UnimplementedError();
+  Future<User?> getById(int id) async {
+    return _users.firstWhere((user) => user.id == id);
   }
 
   @override
-  Future<User?> getByEmail(String email) {
-    // TODO: implement getUserByEmail
-    throw UnimplementedError();
+  Future<User?> getByEmail(String email) async {
+    return _users.firstWhere((user) => user.email == email);
   }
 
   @override
-  Future<List<User>> getAll() {
-    // TODO: implement getAllUsers
-    throw UnimplementedError();
+  Future<List<User>> getAll() async {
+    return _users.toList();
   }
 
   @override
-  Future<User> create(User user) {
-    // TODO: implement createUser
-    throw UnimplementedError();
+  Future<User> create(User user) async {
+    if (_users.any((u) => u.email == user.email)) {
+      throw Exception('E-mail já cadastrado');
+    }
+
+    final newUser = user.copyWith(id: _nextId++, createdAt: DateTime.now());
+
+    _users.add(newUser);
+    return newUser;
   }
 
   @override
-  Future<User> update(User user) {
-    // TODO: implement updateUser
-    throw UnimplementedError();
+  Future<User> update(User user) async {
+    if (user.id == null) {
+      throw Exception('ID do usuário não pode ser nulo');
+    }
+
+    final index = _users.indexWhere((u) => u.id == user.id);
+
+    if (index == -1) {
+      throw Exception('Usuário não encontrado');
+    }
+
+    final updatedUser = user.copyWith(updatedAt: DateTime.now());
+
+    _users[index] = updatedUser;
+    return updatedUser;
   }
 
   @override
-  Future<bool> delete(int id) {
-    // TODO: implement deleteUser
-    throw UnimplementedError();
+  Future<bool> delete(int id) async {
+    final index = _users.indexWhere((u) => u.id == id);
+
+    if (index == -1) {
+      throw Exception('Usuário não encontrado');
+    }
+
+    _users.removeAt(index);
+    return true;
   }
 
   @override
-  Future<bool> authenticate(String email, String password) {
-    // TODO: implement authenticateUser
-    throw UnimplementedError();
+  Future<bool> authenticate(String email, String password) async {
+    _users.firstWhere(
+      (u) =>
+          u.email.toLowerCase() == email.toLowerCase() &&
+          u.password == password,
+    );
+
+    return true;
   }
 }
