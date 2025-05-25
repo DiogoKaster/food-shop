@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_2/ui/cart/widget/cart_screen.dart';
 
 /*class MenuScreen extends StatelessWidget {
   final String restauranteName;
@@ -434,8 +435,9 @@ class MenuScreen extends StatelessWidget {
               width: double.infinity,
               child: ElevatedButton.icon(
                 onPressed: () {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Indo para o carrinho...')),
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const CartScreen()),
                   );
                 },
                 icon: const Icon(Icons.shopping_cart),
