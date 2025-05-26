@@ -11,18 +11,11 @@ abstract class ProductRepository {
 }
 
 class DatabaseProductRepository implements ProductRepository {
-  late Database db;
-
-  DatabaseProductRepository() {
-    _initRepository();
-  }
-
-  _initRepository() async {
-    db = await DB.instance.database;
-  }
+  Future<Database> get _db async => await DB.instance.database;
 
   @override
   Future<Product?> getById(int id) async {
+    final db = await _db;
     final result = await db.query(
       'products',
       where: 'id = ?',
@@ -39,6 +32,7 @@ class DatabaseProductRepository implements ProductRepository {
 
   @override
   Future<List<Product>> getAllByRestaurantId(int restaurantId) async {
+    final db = await _db;
     final result = await db.query(
       'products',
       where: 'restaurant_id = ?',
@@ -50,6 +44,7 @@ class DatabaseProductRepository implements ProductRepository {
 
   @override
   Future<Product> create(Product product) async {
+    final db = await _db;
     final id = await db.insert('products', {
       'restaurant_id': product.restaurantId,
       'name': product.name,
@@ -63,6 +58,7 @@ class DatabaseProductRepository implements ProductRepository {
 
   @override
   Future<Product> update(Product product) async {
+    final db = await _db;
     if (product.id == null) {
       throw Exception('ID do produto não pode ser nulo');
     }
@@ -85,6 +81,7 @@ class DatabaseProductRepository implements ProductRepository {
 
   @override
   Future<bool> delete(int id) async {
+    final db = await _db;
     final rowsDeleted = await db.delete(
       'products',
       where: 'id = ?',

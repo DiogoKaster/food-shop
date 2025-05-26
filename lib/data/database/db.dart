@@ -15,11 +15,11 @@ class DB {
   }
 
   Future<Database> _initDatabase() async {
-    return await openDatabase(
-      join(await getDatabasesPath(), 'foodshop.db'),
-      version: 1,
-      onCreate: _onCreate,
-    );
+    final path = join(await getDatabasesPath(), 'foodshop.db');
+
+    await deleteDatabase(path);
+
+    return await openDatabase(path, version: 1, onCreate: _onCreate);
   }
 
   Future<void> _onCreate(Database db, int version) async {
@@ -72,7 +72,7 @@ class DB {
     List<Map<String, dynamic>> restaurants = [
       {
         'cnpj': '12345678000101',
-        'name': 'Pizzaria Itália',
+        'name': 'Bardaco Itália',
         'street': 'Rua das Flores',
         'number': '100',
         'neighborhood': 'Centro',
@@ -80,7 +80,7 @@ class DB {
         'state': 'SP',
         'zip_code': '01000-000',
         'complement': '',
-        'brand': 'Pizzaria',
+        'brand': 'assets/bitcoin.png',
       },
       {
         'cnpj': '22345678000102',
@@ -92,7 +92,7 @@ class DB {
         'state': 'SP',
         'zip_code': '01500-000',
         'complement': '',
-        'brand': 'Sushi',
+        'brand': 'assets/cardano.png',
       },
       {
         'cnpj': '32345678000103',
@@ -104,7 +104,7 @@ class DB {
         'state': 'SP',
         'zip_code': '05400-000',
         'complement': '',
-        'brand': 'Burger',
+        'brand': 'assets/ethereum.png',
       },
       {
         'cnpj': '42345678000104',
@@ -116,7 +116,7 @@ class DB {
         'state': 'SP',
         'zip_code': '04500-000',
         'complement': '',
-        'brand': 'Churrasco',
+        'brand': 'assets/litecoin.png',
       },
       {
         'cnpj': '52345678000105',
@@ -128,7 +128,7 @@ class DB {
         'state': 'SP',
         'zip_code': '01200-000',
         'complement': '',
-        'brand': 'Pastel',
+        'brand': 'assets/usdcoin.png',
       },
     ];
 
@@ -138,21 +138,21 @@ class DB {
       List<Map<String, dynamic>> products = [
         {
           'restaurant_id': restaurantId,
-          'name': '${restaurant['brand']} Produto 1',
+          'name': '${restaurant['name']} Produto 1',
           'description': 'Descrição do Produto 1',
           'price': 19.99,
           'image': '',
         },
         {
           'restaurant_id': restaurantId,
-          'name': '${restaurant['brand']} Produto 2',
+          'name': '${restaurant['name']} Produto 2',
           'description': 'Descrição do Produto 2',
           'price': 29.99,
           'image': '',
         },
         {
           'restaurant_id': restaurantId,
-          'name': '${restaurant['brand']} Produto 3',
+          'name': '${restaurant['name']} Produto 3',
           'description': 'Descrição do Produto 3',
           'price': 39.99,
           'image': '',
