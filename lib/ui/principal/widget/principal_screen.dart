@@ -21,7 +21,7 @@ class _PrincipalScreenState extends State<PrincipalScreen> {
     _pageController = PageController(initialPage: _currentPage);
   }
 
-  void _onPageChanged(int index) {
+  void setCurrentPage(int index) {
     setState(() {
       _currentPage = index;
     });
@@ -48,8 +48,8 @@ class _PrincipalScreenState extends State<PrincipalScreen> {
     return Scaffold(
       body: PageView(
         controller: _pageController,
-        onPageChanged: _onPageChanged,
         physics: const NeverScrollableScrollPhysics(),
+        onPageChanged: setCurrentPage,
         children: const [
           HomeScreen(),
           SearchScreen(),
