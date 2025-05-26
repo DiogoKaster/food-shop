@@ -1,4 +1,6 @@
+import 'package:flutter_application_2/data/database/db.dart';
 import 'package:flutter_application_2/domain/models/user.dart';
+import 'package:sqflite/sqflite.dart';
 
 abstract class UserRepository {
   Future<User?> getById(int id);
@@ -8,6 +10,114 @@ abstract class UserRepository {
   Future<User> update(User user);
   Future<bool> delete(int id);
   Future<bool> authenticate(String email, String password);
+}
+
+class DatabaseUserRepository implements UserRepository {
+  late Database db;
+
+  DatabaseUserRepository() {
+    _initRepository();
+  }
+
+  _initRepository() async {
+    db = await DB.instance.database;
+  }
+
+  @override
+  Future<User?> getById(int id) async {
+    final result = await db.query('users', where: 'id = ?', whereArgs: [id]);
+
+    if (result.isNotEmpty) {
+      return _fromMap(result.first);
+    }
+    return null;
+  }
+
+  @override
+  Future<User?> getByEmail(String email) async {
+    final result = await db.query(
+      'users',
+      where: 'email = ?',
+      whereArgs: [email],
+    );
+
+    if (result.isNotEmpty) {
+      return _fromMap(result.first);
+    }
+    return null;
+  }
+
+  @override
+  Future<List<User>> getAll() async {
+    final result = await db.query('users');
+    return result.map(_fromMap).toList();
+  }
+
+  @override
+  Future<User> create(User user) async {
+    final id = await db.insert('users', _toMap(user, includeId: false));
+
+    return user.copyWith(id: id);
+  }
+
+  @override
+  Future<User> update(User user) async {
+    if (user.id == null) {
+      throw Exception('ID do usuário não pode ser nulo');
+    }
+
+    await db.update(
+      'users',
+      _toMap(user),
+      where: 'id = ?',
+      whereArgs: [user.id],
+    );
+
+    return user;
+  }
+
+  @override
+  Future<bool> delete(int id) async {
+    final rows = await db.delete('users', where: 'id = ?', whereArgs: [id]);
+
+    return rows > 0;
+  }
+
+  @override
+  Future<bool> authenticate(String email, String password) async {
+    final result = await db.query(
+      'users',
+      where: 'email = ? AND password = ?',
+      whereArgs: [email, password],
+    );
+
+    return result.isNotEmpty;
+  }
+
+  User _fromMap(Map<String, dynamic> map) {
+    return User(
+      id: map['id'],
+      name: map['name'],
+      email: map['email'],
+      document: map['document'],
+      password: map['password'],
+    );
+  }
+
+  Map<String, dynamic> _toMap(User user, {bool includeId = true}) {
+    final map = <String, dynamic>{
+      'name': user.name,
+      'email': user.email,
+      'document': user.document,
+      'password': user.password,
+    };
+
+    if (includeId && user.id != null) {
+      map['id'] = user.id;
+    }
+
+    return map;
+  }
 }
 
 class InMemoryUserRepository implements UserRepository {

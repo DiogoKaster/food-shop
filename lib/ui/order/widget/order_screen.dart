@@ -195,7 +195,7 @@ class OrderCard extends StatelessWidget {
                       vertical: 4,
                     ),
                     decoration: BoxDecoration(
-                      color: pedido.getStatusColor().withOpacity(0.2),
+                      color: pedido.getStatusColor().withValues(alpha: 0.2),
                       borderRadius: BorderRadius.circular(4),
                     ),
                     child: Text(
