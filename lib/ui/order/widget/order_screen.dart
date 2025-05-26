@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_2/models/models.dart';
+import 'package:flutter_application_2/routing/app_routes.dart';
 import 'package:flutter_application_2/ui/core/ui/nav_bar.dart';
-import 'package:flutter_application_2/ui/home/widgets/home_screen.dart';
-import 'package:flutter_application_2/ui/profile/widget/profile_screen.dart';
-import 'package:flutter_application_2/ui/search/widget/search_screen.dart';
-import 'package:flutter_application_2/ui/order_details/widget/order_details_screen.dart';
 
 class OrderScreen extends StatefulWidget {
   const OrderScreen({super.key});
@@ -28,28 +25,16 @@ class _OrderScreenState extends State<OrderScreen> {
 
     switch (index) {
       case 0:
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => const HomeScreen()),
-        );
+        Navigator.pushReplacementNamed(context, AppRoutes.home);
         break;
       case 1:
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => const SearchScreen()),
-        );
+        Navigator.pushReplacementNamed(context, AppRoutes.search);
         break;
       case 2:
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => const OrderScreen()),
-        );
+        Navigator.pushReplacementNamed(context, AppRoutes.order);
         break;
       case 3:
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => const ProfileScreen()),
-        );
+        Navigator.pushReplacementNamed(context, AppRoutes.profile);
         break;
     }
   }
@@ -78,18 +63,7 @@ class _OrderScreenState extends State<OrderScreen> {
                 padding: const EdgeInsets.all(16),
                 itemBuilder: (context, index) {
                   final pedido = _pedidos[index];
-                  return OrderCard(
-                    pedido: pedido,
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder:
-                              (context) => OrderDetailsScreen(pedido: pedido),
-                        ),
-                      );
-                    },
-                  );
+                  return OrderCard(pedido: pedido, onTap: () {});
                 },
               ),
       bottomNavigationBar: CustomBottomNavBar(

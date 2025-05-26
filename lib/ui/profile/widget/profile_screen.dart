@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_2/routing/app_routes.dart';
 import 'package:flutter_application_2/ui/core/ui/nav_bar.dart';
-import 'package:flutter_application_2/ui/home/widgets/home_screen.dart';
-import 'package:flutter_application_2/ui/order/widget/order_screen.dart';
-import 'package:flutter_application_2/ui/search/widget/search_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -19,28 +17,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
     switch (index) {
       case 0:
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => const HomeScreen()),
-        );
+        Navigator.pushReplacementNamed(context, AppRoutes.home);
         break;
       case 1:
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => const SearchScreen()),
-        );
+        Navigator.pushReplacementNamed(context, AppRoutes.search);
         break;
       case 2:
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => const OrderScreen()),
-        );
+        Navigator.pushReplacementNamed(context, AppRoutes.order);
         break;
       case 3:
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => const ProfileScreen()),
-        );
+        Navigator.pushReplacementNamed(context, AppRoutes.profile);
         break;
     }
   }
@@ -98,39 +84,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
             onTap: () {
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(content: Text('Ação: Editar Perfil')),
-              );
-            },
-          ),
-          const Divider(),
-          ListTile(
-            leading: Icon(Icons.settings, color: colorScheme.primary),
-            title: const Text('Configurações'),
-            trailing: const Icon(Icons.arrow_forward_ios, size: 16),
-            onTap: () {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Ação: Configurações')),
-              );
-            },
-          ),
-          const Divider(),
-          ListTile(
-            leading: Icon(Icons.notifications, color: colorScheme.primary),
-            title: const Text('Notificações'),
-            trailing: const Icon(Icons.arrow_forward_ios, size: 16),
-            onTap: () {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Ação: Notificações')),
-              );
-            },
-          ),
-          const Divider(),
-          ListTile(
-            leading: Icon(Icons.help_outline, color: colorScheme.primary),
-            title: const Text('Ajuda & Suporte'),
-            trailing: const Icon(Icons.arrow_forward_ios, size: 16),
-            onTap: () {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Ação: Ajuda & Suporte')),
               );
             },
           ),

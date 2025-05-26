@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_2/routing/app_routes.dart';
 import 'package:flutter_application_2/ui/core/ui/nav_bar.dart';
-import 'package:flutter_application_2/ui/home/widgets/home_screen.dart';
-import 'package:flutter_application_2/ui/order/widget/order_screen.dart';
-import 'package:flutter_application_2/ui/profile/widget/profile_screen.dart';
 
 class SearchScreen extends StatefulWidget {
   const SearchScreen({super.key});
@@ -30,50 +28,20 @@ class _SearchScreenState extends State<SearchScreen> {
 
     switch (index) {
       case 0:
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => const HomeScreen()),
-        );
+        Navigator.pushReplacementNamed(context, AppRoutes.home);
         break;
       case 1:
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => const SearchScreen()),
-        );
+        Navigator.pushReplacementNamed(context, AppRoutes.search);
         break;
       case 2:
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => const OrderScreen()),
-        );
+        Navigator.pushReplacementNamed(context, AppRoutes.order);
         break;
       case 3:
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => const ProfileScreen()),
-        );
+        Navigator.pushReplacementNamed(context, AppRoutes.profile);
         break;
     }
   }
 
-  /*@override
-  Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Busca'),
-        centerTitle: true,
-        backgroundColor: colorScheme.primary,
-        foregroundColor: colorScheme.onPrimary,
-      ),
-      body: const Center(child: Text('Bem-vindo a Busca!')),
-      bottomNavigationBar: CustomBottomNavBar(
-        currentIndex: _selectedIndex,
-        onTap: _onItemTapped,
-      ),
-    );
-  }*/
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;

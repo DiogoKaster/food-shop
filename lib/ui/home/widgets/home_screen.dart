@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_2/routing/app_routes.dart';
 import 'package:flutter_application_2/ui/core/ui/nav_bar.dart';
 import 'package:flutter_application_2/ui/home/view_model/home_view_model.dart';
 import 'package:flutter_application_2/ui/menu/widgets/menu_screen.dart';
-import 'package:flutter_application_2/ui/order/widget/order_screen.dart';
-import 'package:flutter_application_2/ui/profile/widget/profile_screen.dart';
-import 'package:flutter_application_2/ui/search/widget/search_screen.dart';
 import 'package:provider/provider.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -20,25 +18,20 @@ class _HomeScreenState extends State<HomeScreen> {
   void _onItemTapped(int index) {
     if (index == _selectedIndex) return;
 
-    Widget screen;
     switch (index) {
+      case 0:
+        Navigator.pushReplacementNamed(context, AppRoutes.home);
+        break;
       case 1:
-        screen = const SearchScreen();
+        Navigator.pushReplacementNamed(context, AppRoutes.search);
         break;
       case 2:
-        screen = const OrderScreen();
+        Navigator.pushReplacementNamed(context, AppRoutes.order);
         break;
       case 3:
-        screen = const ProfileScreen();
+        Navigator.pushReplacementNamed(context, AppRoutes.profile);
         break;
-      default:
-        screen = const HomeScreen();
     }
-
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(builder: (context) => screen),
-    );
   }
 
   @override
