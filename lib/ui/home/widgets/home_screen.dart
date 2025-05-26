@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_2/routing/app_routes.dart';
-import 'package:flutter_application_2/ui/core/ui/nav_bar.dart';
 import 'package:flutter_application_2/ui/home/view_model/home_view_model.dart';
 import 'package:flutter_application_2/ui/menu/widgets/menu_screen.dart';
 import 'package:provider/provider.dart';
@@ -13,27 +11,6 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  final int _selectedIndex = 0;
-
-  void _onItemTapped(int index) {
-    if (index == _selectedIndex) return;
-
-    switch (index) {
-      case 0:
-        Navigator.pushReplacementNamed(context, AppRoutes.home);
-        break;
-      case 1:
-        Navigator.pushReplacementNamed(context, AppRoutes.search);
-        break;
-      case 2:
-        Navigator.pushReplacementNamed(context, AppRoutes.order);
-        break;
-      case 3:
-        Navigator.pushReplacementNamed(context, AppRoutes.profile);
-        break;
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
@@ -101,10 +78,6 @@ class _HomeScreenState extends State<HomeScreen> {
                   );
                 },
               ),
-      bottomNavigationBar: CustomBottomNavBar(
-        currentIndex: _selectedIndex,
-        onTap: _onItemTapped,
-      ),
     );
   }
 }

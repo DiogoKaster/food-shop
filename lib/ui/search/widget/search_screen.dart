@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_2/routing/app_routes.dart';
-import 'package:flutter_application_2/ui/core/ui/nav_bar.dart';
 
 class SearchScreen extends StatefulWidget {
   const SearchScreen({super.key});
@@ -10,8 +8,6 @@ class SearchScreen extends StatefulWidget {
 }
 
 class _SearchScreenState extends State<SearchScreen> {
-  final int _selectedIndex = 1;
-
   final List<String> categorias = const [
     'Lanches',
     'Doces',
@@ -22,25 +18,6 @@ class _SearchScreenState extends State<SearchScreen> {
     'Italiana',
     'Mexicana',
   ];
-
-  void _onItemTapped(int index) {
-    if (index == _selectedIndex) return;
-
-    switch (index) {
-      case 0:
-        Navigator.pushReplacementNamed(context, AppRoutes.home);
-        break;
-      case 1:
-        Navigator.pushReplacementNamed(context, AppRoutes.search);
-        break;
-      case 2:
-        Navigator.pushReplacementNamed(context, AppRoutes.order);
-        break;
-      case 3:
-        Navigator.pushReplacementNamed(context, AppRoutes.profile);
-        break;
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -104,10 +81,6 @@ class _SearchScreenState extends State<SearchScreen> {
             ),
           ],
         ),
-      ),
-      bottomNavigationBar: CustomBottomNavBar(
-        currentIndex: _selectedIndex,
-        onTap: _onItemTapped,
       ),
     );
   }

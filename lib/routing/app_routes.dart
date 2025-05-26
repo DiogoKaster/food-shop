@@ -7,6 +7,7 @@ import 'package:flutter_application_2/ui/order/widget/order_screen.dart';
 import 'package:flutter_application_2/ui/profile/widget/profile_screen.dart';
 import 'package:flutter_application_2/ui/register/widgets/register_screen.dart';
 import 'package:flutter_application_2/ui/search/widget/search_screen.dart';
+import 'package:flutter_application_2/ui/principal/widget/principal_screen.dart';
 
 class AppRoutes {
   static const login = '/login';
@@ -18,6 +19,7 @@ class AppRoutes {
   static const order = '/order';
   static const orderDetails = '/order_details';
   static const search = '/search';
+  static const principal = '/principal';
 
   static Map<String, WidgetBuilder> getRoutes() {
     return {
@@ -31,6 +33,7 @@ class AppRoutes {
       profile: (context) => const ProfileScreen(),
       order: (context) => const OrderScreen(),
       search: (context) => const SearchScreen(),
+      principal: (context) => const PrincipalScreen(),
     };
   }
 }

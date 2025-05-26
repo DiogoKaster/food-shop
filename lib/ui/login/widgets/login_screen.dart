@@ -120,7 +120,10 @@ class _LoginScreenState extends State<LoginScreen> {
                             content: Text('Login simulado com sucesso!'),
                           ),
                         );
-                        Navigator.pushReplacementNamed(context, AppRoutes.home);
+                        Navigator.pushReplacementNamed(
+                          context,
+                          AppRoutes.principal,
+                        );
                       } else {
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(

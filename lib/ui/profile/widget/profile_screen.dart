@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_2/routing/app_routes.dart';
-import 'package:flutter_application_2/ui/core/ui/nav_bar.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -10,30 +8,8 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-  final int _selectedIndex = 3;
-
-  void _onItemTapped(int index) {
-    if (index == _selectedIndex) return;
-
-    switch (index) {
-      case 0:
-        Navigator.pushReplacementNamed(context, AppRoutes.home);
-        break;
-      case 1:
-        Navigator.pushReplacementNamed(context, AppRoutes.search);
-        break;
-      case 2:
-        Navigator.pushReplacementNamed(context, AppRoutes.order);
-        break;
-      case 3:
-        Navigator.pushReplacementNamed(context, AppRoutes.profile);
-        break;
-    }
-  }
-
   final String _userName = "Usuário Exemplo";
   final String _userEmail = "usuario.exemplo@email.com";
-  final String _profileImageUrl = "https://via.placeholder.com/150";
 
   @override
   Widget build(BuildContext context) {
@@ -55,8 +31,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
               children: [
                 CircleAvatar(
                   radius: 50,
-                  backgroundImage: NetworkImage(_profileImageUrl),
-                  backgroundColor: Colors.grey[300],
+                  backgroundColor: colorScheme.primary.withValues(alpha: 0.1),
+                  child: Icon(
+                    Icons.person,
+                    size: 60,
+                    color: colorScheme.primary,
+                  ),
                 ),
                 const SizedBox(height: 16.0),
                 Text(
@@ -98,10 +78,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
             },
           ),
         ],
-      ),
-      bottomNavigationBar: CustomBottomNavBar(
-        currentIndex: _selectedIndex,
-        onTap: _onItemTapped,
       ),
     );
   }

@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_2/models/models.dart';
-import 'package:flutter_application_2/routing/app_routes.dart';
-import 'package:flutter_application_2/ui/core/ui/nav_bar.dart';
 
 class OrderScreen extends StatefulWidget {
   const OrderScreen({super.key});
@@ -11,32 +9,12 @@ class OrderScreen extends StatefulWidget {
 }
 
 class _OrderScreenState extends State<OrderScreen> {
-  final int _selectedIndex = 2;
   List<Pedido> _pedidos = [];
 
   @override
   void initState() {
     super.initState();
     _pedidos = MockDataService.getPedidosDoUsuario();
-  }
-
-  void _onItemTapped(int index) {
-    if (index == _selectedIndex) return;
-
-    switch (index) {
-      case 0:
-        Navigator.pushReplacementNamed(context, AppRoutes.home);
-        break;
-      case 1:
-        Navigator.pushReplacementNamed(context, AppRoutes.search);
-        break;
-      case 2:
-        Navigator.pushReplacementNamed(context, AppRoutes.order);
-        break;
-      case 3:
-        Navigator.pushReplacementNamed(context, AppRoutes.profile);
-        break;
-    }
   }
 
   @override
@@ -66,10 +44,6 @@ class _OrderScreenState extends State<OrderScreen> {
                   return OrderCard(pedido: pedido, onTap: () {});
                 },
               ),
-      bottomNavigationBar: CustomBottomNavBar(
-        currentIndex: _selectedIndex,
-        onTap: _onItemTapped,
-      ),
     );
   }
 }
