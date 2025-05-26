@@ -1,4 +1,6 @@
+import 'package:flutter_application_2/data/database/db.dart';
 import 'package:flutter_application_2/domain/models/product.dart';
+import 'package:sqflite/sqflite.dart';
 
 abstract class ProductRepository {
   Future<Product?> getById(int id);
@@ -6,6 +8,105 @@ abstract class ProductRepository {
   Future<Product> create(Product product);
   Future<Product> update(Product product);
   Future<bool> delete(int id);
+}
+
+class DatabaseProductRepository implements ProductRepository {
+  late Database db;
+
+  DatabaseProductRepository() {
+    _initRepository();
+  }
+
+  _initRepository() async {
+    db = await DB.instance.database;
+  }
+
+  @override
+  Future<Product?> getById(int id) async {
+    final result = await db.query(
+      'products',
+      where: 'id = ?',
+      whereArgs: [id],
+      limit: 1,
+    );
+
+    if (result.isNotEmpty) {
+      return _mapToProduct(result.first);
+    }
+
+    return null;
+  }
+
+  @override
+  Future<List<Product>> getAllByRestaurantId(int restaurantId) async {
+    final result = await db.query(
+      'products',
+      where: 'restaurant_id = ?',
+      whereArgs: [restaurantId],
+    );
+
+    return result.map(_mapToProduct).toList();
+  }
+
+  @override
+  Future<Product> create(Product product) async {
+    final id = await db.insert('products', {
+      'restaurant_id': product.restaurantId,
+      'name': product.name,
+      'description': product.description,
+      'price': product.price,
+      'image': product.image,
+    });
+
+    return product.copyWith(id: id);
+  }
+
+  @override
+  Future<Product> update(Product product) async {
+    if (product.id == null) {
+      throw Exception('ID do produto não pode ser nulo');
+    }
+
+    await db.update(
+      'products',
+      {
+        'restaurant_id': product.restaurantId,
+        'name': product.name,
+        'description': product.description,
+        'price': product.price,
+        'image': product.image,
+      },
+      where: 'id = ?',
+      whereArgs: [product.id],
+    );
+
+    return product;
+  }
+
+  @override
+  Future<bool> delete(int id) async {
+    final rowsDeleted = await db.delete(
+      'products',
+      where: 'id = ?',
+      whereArgs: [id],
+    );
+
+    return rowsDeleted > 0;
+  }
+
+  Product _mapToProduct(Map<String, dynamic> map) {
+    return Product(
+      id: map['id'] as int,
+      restaurantId: map['restaurant_id'] as int,
+      name: map['name'] as String,
+      description: map['description'] as String,
+      price:
+          map['price'] is int
+              ? (map['price'] as int).toDouble()
+              : map['price'] as double,
+      image: map['image'] as String?,
+    );
+  }
 }
 
 class InMemoryProductRepository implements ProductRepository {

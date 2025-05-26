@@ -6,23 +6,15 @@ abstract class RestaurantRepository {
   Future<Restaurant?> getById(int id);
   Future<List<Restaurant>> getAll();
   Future<Restaurant> create(Restaurant restaurant);
-  Future<Restaurant> updated(Restaurant restaurant);
   Future<bool> delete(int id);
 }
 
 class DatabaseRestaurantRepository implements RestaurantRepository {
-  late Database db;
-
-  DatabaseRestaurantRepository() {
-    _initRepository();
-  }
-
-  _initRepository() async {
-    db = await DB.instance.database;
-  }
+  Future<Database> get _db async => await DB.instance.database;
 
   @override
   Future<Restaurant?> getById(int id) async {
+    final db = await _db;
     final result = await db.query(
       'restaurants',
       where: 'id = ?',
@@ -37,12 +29,14 @@ class DatabaseRestaurantRepository implements RestaurantRepository {
 
   @override
   Future<List<Restaurant>> getAll() async {
+    final db = await _db;
     final result = await db.query('restaurants');
     return result.map(_fromMap).toList();
   }
 
   @override
   Future<Restaurant> create(Restaurant restaurant) async {
+    final db = await _db;
     final id = await db.insert(
       'restaurants',
       _toMap(restaurant, includeId: false),
@@ -52,23 +46,8 @@ class DatabaseRestaurantRepository implements RestaurantRepository {
   }
 
   @override
-  Future<Restaurant> updated(Restaurant restaurant) async {
-    if (restaurant.id == null) {
-      throw Exception('ID do restaurante não pode ser nulo');
-    }
-
-    await db.update(
-      'restaurants',
-      _toMap(restaurant),
-      where: 'id = ?',
-      whereArgs: [restaurant.id],
-    );
-
-    return restaurant;
-  }
-
-  @override
   Future<bool> delete(int id) async {
+    final db = await _db;
     final rows = await db.delete(
       'restaurants',
       where: 'id = ?',
@@ -91,6 +70,14 @@ class DatabaseRestaurantRepository implements RestaurantRepository {
       zipCode: map['zip_code'],
       complement: map['complement'] ?? '',
       brand: map['brand'],
+      createdAt:
+          map['created_at'] != null
+              ? DateTime.tryParse(map['created_at'])
+              : null,
+      updatedAt:
+          map['updated_at'] != null
+              ? DateTime.tryParse(map['updated_at'])
+              : null,
     );
   }
 
@@ -106,6 +93,8 @@ class DatabaseRestaurantRepository implements RestaurantRepository {
       'zip_code': restaurant.zipCode,
       'complement': restaurant.complement,
       'brand': restaurant.brand,
+      'created_at': restaurant.createdAt?.toIso8601String(),
+      'updated_at': restaurant.updatedAt?.toIso8601String(),
     };
 
     if (includeId && restaurant.id != null) {
@@ -245,25 +234,6 @@ class InMemoryRestaurantRepository implements RestaurantRepository {
     _restaurants.add(newRestaurant);
 
     return newRestaurant;
-  }
-
-  @override
-  Future<Restaurant> updated(Restaurant restaurant) async {
-    if (restaurant.id == null) {
-      throw Exception('ID de restaurante não pode ser nulo');
-    }
-
-    final index = _restaurants.indexWhere((r) => r.id == restaurant.id);
-
-    if (index == -1) {
-      throw Exception('Restaurante não encontrado');
-    }
-
-    final updatedRestaurant = restaurant.copyWith(updatedAt: DateTime.now());
-
-    _restaurants[index] = updatedRestaurant;
-
-    return updatedRestaurant;
   }
 
   @override
