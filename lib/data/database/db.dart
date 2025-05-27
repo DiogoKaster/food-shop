@@ -28,6 +28,9 @@ class DB {
     await db.execute(_restaurant);
     await db.execute(_product);
 
+    await db.execute(_order);
+    await db.execute(_orderItem);
+
     await _insertInitialData(db);
   }
 
@@ -66,6 +69,36 @@ class DB {
       price REAL NOT NULL,
       image TEXT,
       FOREIGN KEY (restaurant_id) REFERENCES restaurants(id) ON DELETE CASCADE
+    );
+  ''';
+
+  String get _order => '''
+    CREATE TABLE orders (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      user_id INTEGER NOT NULL,
+      restaurant_id INTEGER NOT NULL,
+      user_address_id INTEGER,
+      delivery_type INTEGER NOT NULL,
+      status INTEGER NOT NULL,
+      total_price REAL NOT NULL,
+      paid_at TEXT,
+      created_at TEXT,
+      updated_at TEXT,
+      FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+      FOREIGN KEY (restaurant_id) REFERENCES restaurants(id) ON DELETE CASCADE
+    );
+  ''';
+
+  String get _orderItem => '''
+    CREATE TABLE order_items (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      order_id INTEGER NOT NULL,
+      product_id INTEGER NOT NULL,
+      quantity INTEGER NOT NULL,
+      created_at TEXT,
+      updated_at TEXT,
+      FOREIGN KEY (order_id) REFERENCES orders(id) ON DELETE CASCADE,
+      FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE CASCADE
     );
   ''';
 

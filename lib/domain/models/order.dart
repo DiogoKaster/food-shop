@@ -6,7 +6,7 @@ class Order {
   final int? id;
   final int userId;
   final int restaurantId;
-  final int userAddressId;
+  final int? userAddressId;
   final DeliveryType deliveryType;
   final OrderStatus status;
   final double totalPrice;
@@ -18,7 +18,7 @@ class Order {
     this.id,
     required this.userId,
     required this.restaurantId,
-    required this.userAddressId,
+    this.userAddressId,
     required this.deliveryType,
     required this.status,
     required this.totalPrice,
