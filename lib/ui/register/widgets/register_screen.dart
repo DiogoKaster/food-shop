@@ -29,6 +29,40 @@ class _RegisterScreenState extends State<RegisterScreen> {
     super.dispose();
   }
 
+  Future<void> registerUser() async {
+    if (!_formKey.currentState!.validate()) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Por favor, corrija os erros no formulário.'),
+        ),
+      );
+      return;
+    }
+
+    final viewModel = context.read<RegisterViewModel>();
+
+    viewModel.name = _nameController.text;
+    viewModel.document = _cpfController.text;
+    viewModel.email = _emailController.text;
+    viewModel.password = _passwordController.text;
+
+    final success = await viewModel.createUser();
+
+    if (!mounted) return;
+
+    if (success) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Cadastro realizado com sucesso!')),
+      );
+      Navigator.pop(context);
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(viewModel.errorMessage ?? 'Erro desconhecido')),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
@@ -165,43 +199,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               SizedBox(
                 width: double.infinity,
                 child: OutlinedButton(
-                  onPressed: () async {
-                    if (_formKey.currentState!.validate()) {
-                      final viewModel = context.read<RegisterViewModel>();
-
-                      viewModel.name = _nameController.text;
-                      viewModel.document = _cpfController.text;
-                      viewModel.email = _emailController.text;
-                      viewModel.password = _passwordController.text;
-
-                      final success = await viewModel.createUser();
-
-                      if (success) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text('Cadastro realizado com sucesso!'),
-                          ),
-                        );
-                        Navigator.pop(context);
-                      } else {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text(
-                              viewModel.errorMessage ?? 'Erro desconhecido',
-                            ),
-                          ),
-                        );
-                      }
-                    } else {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text(
-                            'Por favor, corrija os erros no formulário.',
-                          ),
-                        ),
-                      );
-                    }
-                  },
+                  onPressed: registerUser,
                   style: OutlinedButton.styleFrom(
                     backgroundColor: colorScheme.primary,
                     padding: const EdgeInsets.symmetric(vertical: 16),

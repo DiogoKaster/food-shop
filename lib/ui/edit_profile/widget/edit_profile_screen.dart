@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_application_2/data/repositories/user_repository.dart';
-import 'package:flutter_application_2/ui/login/view_model/login_view_model.dart';
+import 'package:flutter_application_2/ui/edit_profile/view_model/edit_profile_view_model.dart';
 import 'package:provider/provider.dart';
 
 class EditProfileScreen extends StatefulWidget {
@@ -24,7 +24,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   @override
   void initState() {
     super.initState();
-    final user = context.read<LoginViewModel>().loggedUser!;
+    final user = context.read<EditProfileViewModel>().loggedUser!;
 
     _nameController = TextEditingController(text: user.name);
     _emailController = TextEditingController(text: user.email);
@@ -39,6 +39,45 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     _cpfController.dispose();
     _passwordController.dispose();
     super.dispose();
+  }
+
+  Future<void> updateUser() async {
+    if (_formKey.currentState!.validate()) {
+      final viewModel = context.read<EditProfileViewModel>();
+      final currentUser = viewModel.loggedUser!;
+      final repository = context.read<UserRepository>();
+
+      // Verificação de e-mail duplicado
+      final existingUser = await repository.getByEmail(_emailController.text);
+
+      if (!mounted) return;
+
+      if (existingUser != null && existingUser.id != currentUser.id) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Este e-mail já está em uso por outro usuário.'),
+          ),
+        );
+        return;
+      }
+
+      final updatedUser = currentUser.copyWith(
+        name: _nameController.text,
+        email: _emailController.text,
+        document: _cpfController.text,
+        password: _passwordController.text,
+      );
+
+      await viewModel.updateProfile(updatedUser);
+
+      if (!mounted) return;
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Perfil atualizado com sucesso!')),
+      );
+
+      Navigator.pop(context);
+    }
   }
 
   @override
@@ -57,7 +96,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
           key: _formKey,
           child: ListView(
             children: [
-              _buildLabel('Nome'),
+              buildLabel('Nome'),
               const SizedBox(height: 8),
               TextFormField(
                 controller: _nameController,
@@ -65,7 +104,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 inputFormatters: [
                   FilteringTextInputFormatter.allow(RegExp(r'[a-zA-ZÀ-ú\s]+')),
                 ],
-                decoration: _inputDecoration(
+                decoration: inputDecoration(
                   'Digite seu nome completo',
                   Icons.person,
                 ),
@@ -84,12 +123,12 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
               ),
               const SizedBox(height: 20),
 
-              _buildLabel('Email'),
+              buildLabel('Email'),
               const SizedBox(height: 8),
               TextFormField(
                 controller: _emailController,
                 keyboardType: TextInputType.emailAddress,
-                decoration: _inputDecoration('Digite seu E-mail', Icons.email),
+                decoration: inputDecoration('Digite seu E-mail', Icons.email),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Campo obrigatório';
@@ -102,7 +141,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
               ),
               const SizedBox(height: 20),
 
-              _buildLabel('CPF'),
+              buildLabel('CPF'),
               const SizedBox(height: 8),
               TextFormField(
                 controller: _cpfController,
@@ -111,7 +150,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   FilteringTextInputFormatter.digitsOnly,
                   LengthLimitingTextInputFormatter(11),
                 ],
-                decoration: _inputDecoration(
+                decoration: inputDecoration(
                   'Digite seu CPF (somente números)',
                   Icons.badge,
                 ),
@@ -127,12 +166,12 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
               ),
               const SizedBox(height: 20),
 
-              _buildLabel('Senha'),
+              buildLabel('Senha'),
               const SizedBox(height: 8),
               TextFormField(
                 controller: _passwordController,
                 obscureText: _isPasswordObscured,
-                decoration: _inputDecoration(
+                decoration: inputDecoration(
                   'Digite sua senha',
                   Icons.lock,
                 ).copyWith(
@@ -163,46 +202,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
               const SizedBox(height: 30),
 
               ElevatedButton(
-                onPressed: () async {
-                  if (_formKey.currentState!.validate()) {
-                    final viewModel = context.read<LoginViewModel>();
-                    final currentUser = viewModel.loggedUser!;
-                    final repository = context.read<UserRepository>();
-
-                    // Verificação de e-mail duplicado
-                    final existingUser = await repository.getByEmail(
-                      _emailController.text,
-                    );
-                    if (existingUser != null &&
-                        existingUser.id != currentUser.id) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text(
-                            'Este e-mail já está em uso por outro usuário.',
-                          ),
-                        ),
-                      );
-                      return;
-                    }
-
-                    final updatedUser = currentUser.copyWith(
-                      name: _nameController.text,
-                      email: _emailController.text,
-                      document: _cpfController.text,
-                      password: _passwordController.text,
-                    );
-
-                    await viewModel.updateProfile(updatedUser);
-
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text('Perfil atualizado com sucesso!'),
-                      ),
-                    );
-
-                    Navigator.pop(context);
-                  }
-                },
+                onPressed: updateUser,
                 style: ElevatedButton.styleFrom(
                   backgroundColor: colorScheme.primary,
                   foregroundColor: colorScheme.onPrimary,
@@ -220,21 +220,21 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     );
   }
 
-  Widget _buildLabel(String text) {
+  Widget buildLabel(String text) {
     final colorScheme = Theme.of(context).colorScheme;
     return Align(
       alignment: Alignment.centerLeft,
       child: Text(
         text,
         style: TextStyle(
-          color: colorScheme.onSurface.withOpacity(0.7),
+          color: colorScheme.onSurface.withValues(alpha: 0.7),
           fontWeight: FontWeight.w500,
         ),
       ),
     );
   }
 
-  InputDecoration _inputDecoration(String hint, IconData icon) {
+  InputDecoration inputDecoration(String hint, IconData icon) {
     final colorScheme = Theme.of(context).colorScheme;
     return InputDecoration(
       filled: true,
