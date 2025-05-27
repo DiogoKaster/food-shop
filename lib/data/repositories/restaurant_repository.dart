@@ -97,7 +97,7 @@ class DatabaseRestaurantRepository implements RestaurantRepository {
       'updated_at': restaurant.updatedAt?.toIso8601String(),
     };
 
-    if (includeId && restaurant.id != null) {
+    if (includeId) {
       map['id'] = restaurant.id;
     }
 
