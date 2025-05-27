@@ -17,7 +17,8 @@ class DB {
   Future<Database> _initDatabase() async {
     final path = join(await getDatabasesPath(), 'foodshop.db');
 
-    await deleteDatabase(path);
+    //descomentar se quiser apagar o database
+    //await deleteDatabase(path);
 
     return await openDatabase(path, version: 1, onCreate: _onCreate);
   }
@@ -163,5 +164,19 @@ class DB {
         await db.insert('products', product);
       }
     }
+
+    await db.insert('users', {
+      'name': 'Isabella Novaes',
+      'email': 'bella@hotmail.com',
+      'document': '52511377888',
+      'password': '123456',
+    });
+
+    await db.insert('users', {
+      'name': 'Maria Oliveira',
+      'email': 'maria@hotmail.com',
+      'document': '52511377888',
+      'password': '111222',
+    });
   }
 }

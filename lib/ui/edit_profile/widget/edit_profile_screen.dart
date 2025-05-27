@@ -1,30 +1,42 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_application_2/ui/register/view_model/register_view_model.dart';
+import 'package:flutter_application_2/data/repositories/user_repository.dart';
+import 'package:flutter_application_2/ui/login/view_model/login_view_model.dart';
 import 'package:provider/provider.dart';
 
-class RegisterScreen extends StatefulWidget {
-  const RegisterScreen({super.key});
+class EditProfileScreen extends StatefulWidget {
+  const EditProfileScreen({super.key});
 
   @override
-  State<RegisterScreen> createState() => _RegisterScreenState();
+  State<EditProfileScreen> createState() => _EditProfileScreenState();
 }
 
-class _RegisterScreenState extends State<RegisterScreen> {
+class _EditProfileScreenState extends State<EditProfileScreen> {
   final _formKey = GlobalKey<FormState>();
 
-  final TextEditingController _nameController = TextEditingController();
-  final TextEditingController _cpfController = TextEditingController();
-  final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
+  late TextEditingController _nameController;
+  late TextEditingController _emailController;
+  late TextEditingController _cpfController;
+  late TextEditingController _passwordController;
 
   bool _isPasswordObscured = true;
 
   @override
+  void initState() {
+    super.initState();
+    final user = context.read<LoginViewModel>().loggedUser!;
+
+    _nameController = TextEditingController(text: user.name);
+    _emailController = TextEditingController(text: user.email);
+    _cpfController = TextEditingController(text: user.document);
+    _passwordController = TextEditingController(text: user.password);
+  }
+
+  @override
   void dispose() {
     _nameController.dispose();
-    _cpfController.dispose();
     _emailController.dispose();
+    _cpfController.dispose();
     _passwordController.dispose();
     super.dispose();
   }
@@ -32,23 +44,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    final textTheme = Theme.of(context).textTheme;
+
     return Scaffold(
       appBar: AppBar(
-        elevation: 0,
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: colorScheme.onPrimary),
-          onPressed: () => Navigator.of(context).pop(),
-        ),
-        centerTitle: true,
+        title: const Text('Editar Perfil'),
         backgroundColor: colorScheme.primary,
         foregroundColor: colorScheme.onPrimary,
-        title: Text(
-          'Cadastro',
-          style: textTheme.headlineSmall?.copyWith(
-            color: colorScheme.onPrimary,
-          ),
-        ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(24.0),
@@ -56,18 +57,18 @@ class _RegisterScreenState extends State<RegisterScreen> {
           key: _formKey,
           child: ListView(
             children: [
-              _buildLabel('Nome', colorScheme),
+              _buildLabel('Nome'),
               const SizedBox(height: 8),
               TextFormField(
                 controller: _nameController,
-                decoration: inputDecoration(
-                  'Digite seu nome completo',
-                  Icons.person,
-                ),
                 keyboardType: TextInputType.name,
                 inputFormatters: [
                   FilteringTextInputFormatter.allow(RegExp(r'[a-zA-ZÀ-ú\s]+')),
                 ],
+                decoration: _inputDecoration(
+                  'Digite seu nome completo',
+                  Icons.person,
+                ),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Campo obrigatório';
@@ -83,37 +84,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
               ),
               const SizedBox(height: 20),
 
-              _buildLabel('CPF', colorScheme),
-              const SizedBox(height: 8),
-              TextFormField(
-                controller: _cpfController,
-                decoration: inputDecoration(
-                  'Digite seu CPF (somente números)',
-                  Icons.badge,
-                ),
-                keyboardType: TextInputType.number,
-                inputFormatters: [
-                  FilteringTextInputFormatter.digitsOnly,
-                  LengthLimitingTextInputFormatter(11),
-                ],
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Campo obrigatório';
-                  }
-                  if (value.length != 11) {
-                    return 'CPF deve conter 11 dígitos';
-                  }
-                  return null;
-                },
-              ),
-              const SizedBox(height: 20),
-
-              _buildLabel('Email', colorScheme),
+              _buildLabel('Email'),
               const SizedBox(height: 8),
               TextFormField(
                 controller: _emailController,
-                decoration: inputDecoration('Digite seu E-mail', Icons.email),
                 keyboardType: TextInputType.emailAddress,
+                decoration: _inputDecoration('Digite seu E-mail', Icons.email),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Campo obrigatório';
@@ -126,12 +102,37 @@ class _RegisterScreenState extends State<RegisterScreen> {
               ),
               const SizedBox(height: 20),
 
-              _buildLabel('Senha', colorScheme),
+              _buildLabel('CPF'),
+              const SizedBox(height: 8),
+              TextFormField(
+                controller: _cpfController,
+                keyboardType: TextInputType.number,
+                inputFormatters: [
+                  FilteringTextInputFormatter.digitsOnly,
+                  LengthLimitingTextInputFormatter(11),
+                ],
+                decoration: _inputDecoration(
+                  'Digite seu CPF (somente números)',
+                  Icons.badge,
+                ),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Campo obrigatório';
+                  }
+                  if (value.length != 11) {
+                    return 'CPF deve conter 11 dígitos';
+                  }
+                  return null;
+                },
+              ),
+              const SizedBox(height: 20),
+
+              _buildLabel('Senha'),
               const SizedBox(height: 8),
               TextFormField(
                 controller: _passwordController,
                 obscureText: _isPasswordObscured,
-                decoration: inputDecoration(
+                decoration: _inputDecoration(
                   'Digite sua senha',
                   Icons.lock,
                 ).copyWith(
@@ -149,7 +150,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     },
                   ),
                 ),
-                keyboardType: TextInputType.visiblePassword,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Campo obrigatório';
@@ -162,61 +162,56 @@ class _RegisterScreenState extends State<RegisterScreen> {
               ),
               const SizedBox(height: 30),
 
-              SizedBox(
-                width: double.infinity,
-                child: OutlinedButton(
-                  onPressed: () async {
-                    if (_formKey.currentState!.validate()) {
-                      final viewModel = context.read<RegisterViewModel>();
+              ElevatedButton(
+                onPressed: () async {
+                  if (_formKey.currentState!.validate()) {
+                    final viewModel = context.read<LoginViewModel>();
+                    final currentUser = viewModel.loggedUser!;
+                    final repository = context.read<UserRepository>();
 
-                      viewModel.name = _nameController.text;
-                      viewModel.document = _cpfController.text;
-                      viewModel.email = _emailController.text;
-                      viewModel.password = _passwordController.text;
-
-                      final success = await viewModel.createUser();
-
-                      if (success) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text('Cadastro realizado com sucesso!'),
-                          ),
-                        );
-                        Navigator.pop(context);
-                      } else {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text(
-                              viewModel.errorMessage ?? 'Erro desconhecido',
-                            ),
-                          ),
-                        );
-                      }
-                    } else {
+                    // Verificação de e-mail duplicado
+                    final existingUser = await repository.getByEmail(
+                      _emailController.text,
+                    );
+                    if (existingUser != null &&
+                        existingUser.id != currentUser.id) {
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
                           content: Text(
-                            'Por favor, corrija os erros no formulário.',
+                            'Este e-mail já está em uso por outro usuário.',
                           ),
                         ),
                       );
+                      return;
                     }
-                  },
-                  style: OutlinedButton.styleFrom(
-                    backgroundColor: colorScheme.primary,
-                    padding: const EdgeInsets.symmetric(vertical: 16),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                  ),
-                  child: Text(
-                    'Criar conta',
-                    style: TextStyle(
-                      color: colorScheme.onPrimary,
-                      fontSize: 16,
-                    ),
+
+                    final updatedUser = currentUser.copyWith(
+                      name: _nameController.text,
+                      email: _emailController.text,
+                      document: _cpfController.text,
+                      password: _passwordController.text,
+                    );
+
+                    await viewModel.updateProfile(updatedUser);
+
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('Perfil atualizado com sucesso!'),
+                      ),
+                    );
+
+                    Navigator.pop(context);
+                  }
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: colorScheme.primary,
+                  foregroundColor: colorScheme.onPrimary,
+                  padding: const EdgeInsets.symmetric(vertical: 16),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
                   ),
                 ),
+                child: const Text('Salvar Alterações'),
               ),
             ],
           ),
@@ -225,20 +220,21 @@ class _RegisterScreenState extends State<RegisterScreen> {
     );
   }
 
-  Widget _buildLabel(String text, ColorScheme colorScheme) {
+  Widget _buildLabel(String text) {
+    final colorScheme = Theme.of(context).colorScheme;
     return Align(
       alignment: Alignment.centerLeft,
       child: Text(
         text,
         style: TextStyle(
-          color: colorScheme.onSurface.withValues(alpha: 0.7),
+          color: colorScheme.onSurface.withOpacity(0.7),
           fontWeight: FontWeight.w500,
         ),
       ),
     );
   }
 
-  InputDecoration inputDecoration(String hint, IconData icon) {
+  InputDecoration _inputDecoration(String hint, IconData icon) {
     final colorScheme = Theme.of(context).colorScheme;
     return InputDecoration(
       filled: true,
