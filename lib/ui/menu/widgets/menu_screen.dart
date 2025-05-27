@@ -1,77 +1,33 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_2/ui/cart/widget/cart_screen.dart';
+import 'package:flutter_application_2/ui/core/ui/menu_list.dart';
+import 'package:flutter_application_2/ui/menu/view_model/menu_view_model.dart';
+import 'package:provider/provider.dart';
 
-class MenuScreen extends StatelessWidget {
+class MenuScreen extends StatefulWidget {
   final String restauranteName;
   final String restauranteImage;
+  final int restaurantId;
 
   const MenuScreen({
     super.key,
     required this.restauranteName,
     required this.restauranteImage,
+    required this.restaurantId,
   });
 
-  void _mostrarPopup(BuildContext context, String nome, String preco) {
-    int quantidade = 1;
-    double precoDouble =
-        double.tryParse(
-          preco.replaceAll(RegExp(r'[^\d,]'), '').replaceAll(',', '.'),
-        ) ??
-        0;
+  @override
+  State<MenuScreen> createState() => _MenuScreenState();
+}
 
-    showModalBottomSheet(
-      context: context,
-      builder: (context) {
-        return StatefulBuilder(
-          builder:
-              (context, setState) => Padding(
-                padding: const EdgeInsets.all(16),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(nome, style: Theme.of(context).textTheme.titleLarge),
-                    const SizedBox(height: 16),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        IconButton(
-                          icon: const Icon(Icons.remove),
-                          onPressed: () {
-                            if (quantidade > 1) setState(() => quantidade--);
-                          },
-                        ),
-                        Text(
-                          '$quantidade',
-                          style: const TextStyle(fontSize: 18),
-                        ),
-                        IconButton(
-                          icon: const Icon(Icons.add),
-                          onPressed: () => setState(() => quantidade++),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 16),
-                    ElevatedButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text(
-                              '$quantidade x $nome adicionado ao carrinho',
-                            ),
-                          ),
-                        );
-                      },
-                      child: Text(
-                        'Adicionar    R\$ ${(precoDouble * quantidade).toStringAsFixed(2)}',
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-        );
-      },
-    );
+class _MenuScreenState extends State<MenuScreen> {
+  @override
+  void initState() {
+    super.initState();
+
+    final menuViewModel = context.read<MenuViewModel>();
+    menuViewModel.restaurantId = widget.restaurantId;
+    menuViewModel.getProducts();
   }
 
   @override
@@ -81,7 +37,7 @@ class MenuScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(restauranteName),
+        title: Text(widget.restauranteName),
         centerTitle: true,
         backgroundColor: colorScheme.primary,
         foregroundColor: colorScheme.onPrimary,
@@ -94,7 +50,7 @@ class MenuScreen extends StatelessWidget {
             height: 200,
             decoration: BoxDecoration(
               image: DecorationImage(
-                image: AssetImage(restauranteImage),
+                image: AssetImage(widget.restauranteImage),
                 fit: BoxFit.cover,
               ),
             ),
@@ -109,44 +65,7 @@ class MenuScreen extends StatelessWidget {
               ),
             ),
           ),
-          Expanded(
-            child: ListView(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-              children: [
-                MenuItemCard(
-                  nome: 'Marmita Tradicional',
-                  descricao: 'Arroz, feijão, carne e salada',
-                  preco: 'R\$ 15,90',
-                  onTap:
-                      () => _mostrarPopup(
-                        context,
-                        'Marmita Tradicional',
-                        '15,90',
-                      ),
-                ),
-                const SizedBox(height: 10),
-                MenuItemCard(
-                  nome: 'Marmita Fitness',
-                  descricao: 'Arroz integral, frango grelhado e legumes',
-                  preco: 'R\$ 18,90',
-                  onTap:
-                      () => _mostrarPopup(context, 'Marmita Fitness', '18,90'),
-                ),
-                const SizedBox(height: 10),
-                MenuItemCard(
-                  nome: 'Marmita Vegetariana',
-                  descricao: 'Arroz, legumes, proteína de soja e salada',
-                  preco: 'R\$ 16,90',
-                  onTap:
-                      () => _mostrarPopup(
-                        context,
-                        'Marmita Vegetariana',
-                        '16,90',
-                      ),
-                ),
-              ],
-            ),
-          ),
+          const Expanded(child: MenuProductList()),
           Padding(
             padding: const EdgeInsets.all(16),
             child: SizedBox(
@@ -173,69 +92,6 @@ class MenuScreen extends StatelessWidget {
             ),
           ),
         ],
-      ),
-    );
-  }
-}
-
-class MenuItemCard extends StatelessWidget {
-  final String nome;
-  final String descricao;
-  final String preco;
-  final VoidCallback onTap;
-
-  const MenuItemCard({
-    super.key,
-    required this.nome,
-    required this.descricao,
-    required this.preco,
-    required this.onTap,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final textTheme = Theme.of(context).textTheme;
-
-    return InkWell(
-      onTap: onTap,
-      borderRadius: BorderRadius.circular(8),
-      child: Card(
-        elevation: 2,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-        child: Padding(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Expanded(
-                    child: Text(
-                      nome,
-                      style: textTheme.titleMedium?.copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 10),
-                  Text(
-                    preco,
-                    style: textTheme.titleMedium?.copyWith(
-                      fontWeight: FontWeight.bold,
-                      color: Colors.green[700],
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 8),
-              Text(
-                descricao,
-                style: textTheme.bodyMedium?.copyWith(color: Colors.grey[600]),
-              ),
-            ],
-          ),
-        ),
       ),
     );
   }

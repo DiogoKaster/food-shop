@@ -27,8 +27,11 @@ class AppRoutes {
       register: (context) => const RegisterScreen(),
       home: (context) => const HomeScreen(),
       menu:
-          (context) =>
-              const MenuScreen(restauranteName: '', restauranteImage: ''),
+          (context) => const MenuScreen(
+            restauranteName: '',
+            restauranteImage: '',
+            restaurantId: 0,
+          ),
       cart: (context) => const CartScreen(),
       profile: (context) => const ProfileScreen(),
       order: (context) => const OrderScreen(),

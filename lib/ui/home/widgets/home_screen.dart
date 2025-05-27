@@ -39,6 +39,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               (context) => MenuScreen(
                                 restauranteName: restaurant.name,
                                 restauranteImage: restaurant.brand,
+                                restaurantId: restaurant.id,
                               ),
                         ),
                       );
