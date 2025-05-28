@@ -1,6 +1,14 @@
 # Ifood Shop
 
-Um novo projeto Flutter.
+Um novo projeto Flutter para compras de pratos de restaurantes.
+
+## Alunos
+
+Diogo Kaster
+
+Rafael de Paiva Perina
+
+Isabela Novaes
 
 ## Introdução
 
