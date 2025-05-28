@@ -15,15 +15,23 @@ class RegisterViewModel extends ChangeNotifier {
   RegisterViewModel({required this.userRepository});
 
   Future<bool> createUser() async {
+    isLoading = true;
     notifyListeners();
 
     try {
+      final existingUser = await userRepository.getByEmail(email);
+      if (existingUser != null) {
+        errorMessage = 'E-mail já cadastrado';
+        return false;
+      }
+
       final user = User(
         name: name,
         email: email,
         document: document,
         password: password,
       );
+
       await userRepository.create(user);
       errorMessage = null;
       return true;
@@ -31,6 +39,7 @@ class RegisterViewModel extends ChangeNotifier {
       errorMessage = 'Erro ao criar usuário';
       return false;
     } finally {
+      isLoading = false;
       notifyListeners();
     }
   }

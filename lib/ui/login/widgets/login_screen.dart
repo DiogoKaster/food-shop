@@ -1,99 +1,7 @@
-/*import 'package:flutter/material.dart';
-import 'package:flutter_application_2/routing/app_routes.dart';
-
-class LoginScreen extends StatelessWidget {
-  const LoginScreen({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-
-    return Scaffold(
-      body: Padding(
-        padding: EdgeInsets.all(24.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              'Login',
-              style: Theme.of(
-                context,
-              ).textTheme.headlineMedium?.copyWith(color: colorScheme.primary),
-            ),
-            SizedBox(height: 40),
-            Align(
-              alignment: Alignment.centerLeft,
-              child: Text(
-                'Email',
-                style: Theme.of(context).textTheme.bodyLarge,
-              ),
-            ),
-            SizedBox(height: 8),
-            TextField(
-              decoration: InputDecoration(
-                prefixIcon: Icon(Icons.email, color: colorScheme.primary),
-                hintText: 'Digite seu E-mail',
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8),
-                ),
-              ),
-            ),
-            SizedBox(height: 20),
-            Align(
-              alignment: Alignment.centerLeft,
-              child: Text(
-                'Senha',
-                style: Theme.of(context).textTheme.bodyLarge,
-              ),
-            ),
-            SizedBox(height: 8),
-            TextField(
-              obscureText: true,
-              decoration: InputDecoration(
-                prefixIcon: Icon(Icons.lock, color: colorScheme.primary),
-                hintText: 'Digite sua senha',
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8),
-                ),
-              ),
-            ),
-            SizedBox(height: 30),
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton(
-                onPressed: () {
-                  Navigator.pushReplacementNamed(context, AppRoutes.home);
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: colorScheme.primary,
-                  foregroundColor: colorScheme.onPrimary,
-                  padding: EdgeInsets.symmetric(vertical: 16),
-                ),
-                child: Text('Entrar'),
-              ),
-            ),
-            SizedBox(height: 20),
-            SizedBox(
-              width: double.infinity,
-              child: OutlinedButton(
-                onPressed: () {
-                  Navigator.pushNamed(context, AppRoutes.register);
-                },
-                style: OutlinedButton.styleFrom(
-                  padding: EdgeInsets.symmetric(vertical: 16),
-                ),
-                child: Text('Criar conta'),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}*/
-
 import 'package:flutter/material.dart';
 import 'package:flutter_application_2/routing/app_routes.dart';
+import 'package:flutter_application_2/ui/login/view_model/login_view_model.dart';
+import 'package:provider/provider.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -104,10 +12,8 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
-
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-
   bool _isPasswordObscured = true;
 
   @override
@@ -117,10 +23,34 @@ class _LoginScreenState extends State<LoginScreen> {
     super.dispose();
   }
 
+  Future<void> loginUser() async {
+    if (!_formKey.currentState!.validate()) {
+      return;
+    }
+
+    final viewModel = context.read<LoginViewModel>();
+
+    final success = await viewModel.authenticate(
+      _emailController.text.trim(),
+      _passwordController.text.trim(),
+    );
+
+    if (!mounted) return;
+
+    if (success) {
+      Navigator.pushReplacementNamed(context, AppRoutes.principal);
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Email ou senha inválidos.')),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     final textTheme = Theme.of(context).textTheme;
+    final viewModel = context.watch<LoginViewModel>();
 
     return Scaffold(
       appBar: AppBar(
@@ -189,46 +119,22 @@ class _LoginScreenState extends State<LoginScreen> {
                               : Icons.visibility,
                           color: colorScheme.primary,
                         ),
-                        onPressed: () {
-                          setState(() {
-                            _isPasswordObscured = !_isPasswordObscured;
-                          });
-                        },
+                        onPressed:
+                            () => setState(
+                              () => _isPasswordObscured = !_isPasswordObscured,
+                            ),
                       ),
                     ),
-                    keyboardType: TextInputType.visiblePassword,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Campo obrigatório';
-                      }
-                      return null;
-                    },
+                    validator:
+                        (value) =>
+                            (value == null || value.isEmpty)
+                                ? 'Campo obrigatório'
+                                : null,
                   ),
                   const SizedBox(height: 30),
 
                   ElevatedButton(
-                    onPressed: () {
-                      if (_formKey.currentState!.validate()) {
-                        String email = _emailController.text;
-                        String password = _passwordController.text;
-
-                        print('Login com Email: $email');
-                        print('Login com Senha: $password');
-
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text('Login simulado com sucesso!'),
-                          ),
-                        );
-                        Navigator.pushReplacementNamed(context, AppRoutes.home);
-                      } else {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text('Por favor, corrija os erros.'),
-                          ),
-                        );
-                      }
-                    },
+                    onPressed: viewModel.isLoading ? null : loginUser,
                     style: ElevatedButton.styleFrom(
                       backgroundColor: colorScheme.primary,
                       foregroundColor: colorScheme.onPrimary,
@@ -238,14 +144,18 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                       textStyle: const TextStyle(fontSize: 16),
                     ),
-                    child: const Text('Entrar'),
+                    child:
+                        viewModel.isLoading
+                            ? const CircularProgressIndicator(
+                              color: Colors.white,
+                            )
+                            : const Text('Entrar'),
                   ),
                   const SizedBox(height: 20),
 
                   OutlinedButton(
-                    onPressed: () {
-                      Navigator.pushNamed(context, AppRoutes.register);
-                    },
+                    onPressed:
+                        () => Navigator.pushNamed(context, AppRoutes.register),
                     style: OutlinedButton.styleFrom(
                       foregroundColor: colorScheme.primary,
                       side: BorderSide(color: colorScheme.primary),
@@ -266,52 +176,47 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  Widget _buildLabel(String text, TextTheme textTheme) {
-    return Align(
-      alignment: Alignment.centerLeft,
-      child: Text(
-        text,
-        style: textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.w500),
-      ),
-    );
-  }
+  Widget _buildLabel(String text, TextTheme textTheme) => Align(
+    alignment: Alignment.centerLeft,
+    child: Text(
+      text,
+      style: textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.w500),
+    ),
+  );
 
   InputDecoration _inputDecoration(
     String hint,
     IconData icon,
     ColorScheme colorScheme,
-  ) {
-    return InputDecoration(
-      filled: true,
-      fillColor: colorScheme.surface,
-      prefixIcon: Icon(icon, color: colorScheme.primary),
-      prefixIconColor: colorScheme.primary,
-      hintText: hint,
-      hintStyle: TextStyle(color: Colors.grey[500]),
-      border: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(8),
-        borderSide: BorderSide(color: Colors.grey[400]!),
-      ),
-      enabledBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(8),
-        borderSide: BorderSide(color: Colors.grey[400]!),
-      ),
-      focusedBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(8),
-        borderSide: BorderSide(color: colorScheme.primary, width: 2.0),
-      ),
-      errorBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(8),
-        borderSide: BorderSide(color: colorScheme.error, width: 1.0),
-      ),
-      focusedErrorBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(8),
-        borderSide: BorderSide(color: colorScheme.error, width: 2.0),
-      ),
-      contentPadding: const EdgeInsets.symmetric(
-        vertical: 15.0,
-        horizontal: 10.0,
-      ),
-    );
-  }
+  ) => InputDecoration(
+    filled: true,
+    fillColor: colorScheme.surface,
+    prefixIcon: Icon(icon, color: colorScheme.primary),
+    hintText: hint,
+    hintStyle: TextStyle(color: Colors.grey[500]),
+    border: OutlineInputBorder(
+      borderRadius: BorderRadius.circular(8),
+      borderSide: BorderSide(color: Colors.grey[400]!),
+    ),
+    enabledBorder: OutlineInputBorder(
+      borderRadius: BorderRadius.circular(8),
+      borderSide: BorderSide(color: Colors.grey[400]!),
+    ),
+    focusedBorder: OutlineInputBorder(
+      borderRadius: BorderRadius.circular(8),
+      borderSide: BorderSide(color: colorScheme.primary, width: 2.0),
+    ),
+    errorBorder: OutlineInputBorder(
+      borderRadius: BorderRadius.circular(8),
+      borderSide: BorderSide(color: colorScheme.error, width: 1.0),
+    ),
+    focusedErrorBorder: OutlineInputBorder(
+      borderRadius: BorderRadius.circular(8),
+      borderSide: BorderSide(color: colorScheme.error, width: 2.0),
+    ),
+    contentPadding: const EdgeInsets.symmetric(
+      vertical: 15.0,
+      horizontal: 10.0,
+    ),
+  );
 }

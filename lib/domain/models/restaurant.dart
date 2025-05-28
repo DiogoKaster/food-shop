@@ -1,5 +1,5 @@
 class Restaurant {
-  final int? id;
+  final int id;
   final String cnpj;
   final String name;
   final String street;
@@ -14,7 +14,7 @@ class Restaurant {
   final DateTime? updatedAt;
 
   Restaurant({
-    this.id,
+    required this.id,
     required this.cnpj,
     required this.name,
     required this.street,

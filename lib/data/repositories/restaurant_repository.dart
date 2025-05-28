@@ -1,11 +1,108 @@
+import 'package:flutter_application_2/data/database/db.dart';
 import 'package:flutter_application_2/domain/models/restaurant.dart';
+import 'package:sqflite/sqflite.dart';
 
 abstract class RestaurantRepository {
   Future<Restaurant?> getById(int id);
   Future<List<Restaurant>> getAll();
   Future<Restaurant> create(Restaurant restaurant);
-  Future<Restaurant> updated(Restaurant restaurant);
   Future<bool> delete(int id);
+}
+
+class DatabaseRestaurantRepository implements RestaurantRepository {
+  Future<Database> get _db async => await DB.instance.database;
+
+  @override
+  Future<Restaurant?> getById(int id) async {
+    final db = await _db;
+    final result = await db.query(
+      'restaurants',
+      where: 'id = ?',
+      whereArgs: [id],
+    );
+
+    if (result.isNotEmpty) {
+      return _fromMap(result.first);
+    }
+    return null;
+  }
+
+  @override
+  Future<List<Restaurant>> getAll() async {
+    final db = await _db;
+    final result = await db.query('restaurants');
+    return result.map(_fromMap).toList();
+  }
+
+  @override
+  Future<Restaurant> create(Restaurant restaurant) async {
+    final db = await _db;
+    final id = await db.insert(
+      'restaurants',
+      _toMap(restaurant, includeId: false),
+    );
+
+    return restaurant.copyWith(id: id);
+  }
+
+  @override
+  Future<bool> delete(int id) async {
+    final db = await _db;
+    final rows = await db.delete(
+      'restaurants',
+      where: 'id = ?',
+      whereArgs: [id],
+    );
+
+    return rows > 0;
+  }
+
+  Restaurant _fromMap(Map<String, dynamic> map) {
+    return Restaurant(
+      id: map['id'],
+      cnpj: map['cnpj'],
+      name: map['name'],
+      street: map['street'],
+      number: map['number'],
+      neighborhood: map['neighborhood'],
+      city: map['city'],
+      state: map['state'],
+      zipCode: map['zip_code'],
+      complement: map['complement'] ?? '',
+      brand: map['brand'],
+      createdAt:
+          map['created_at'] != null
+              ? DateTime.tryParse(map['created_at'])
+              : null,
+      updatedAt:
+          map['updated_at'] != null
+              ? DateTime.tryParse(map['updated_at'])
+              : null,
+    );
+  }
+
+  Map<String, dynamic> _toMap(Restaurant restaurant, {bool includeId = true}) {
+    final map = <String, dynamic>{
+      'cnpj': restaurant.cnpj,
+      'name': restaurant.name,
+      'street': restaurant.street,
+      'number': restaurant.number,
+      'neighborhood': restaurant.neighborhood,
+      'city': restaurant.city,
+      'state': restaurant.state,
+      'zip_code': restaurant.zipCode,
+      'complement': restaurant.complement,
+      'brand': restaurant.brand,
+      'created_at': restaurant.createdAt?.toIso8601String(),
+      'updated_at': restaurant.updatedAt?.toIso8601String(),
+    };
+
+    if (includeId) {
+      map['id'] = restaurant.id;
+    }
+
+    return map;
+  }
 }
 
 class InMemoryRestaurantRepository implements RestaurantRepository {
@@ -137,25 +234,6 @@ class InMemoryRestaurantRepository implements RestaurantRepository {
     _restaurants.add(newRestaurant);
 
     return newRestaurant;
-  }
-
-  @override
-  Future<Restaurant> updated(Restaurant restaurant) async {
-    if (restaurant.id == null) {
-      throw Exception('ID de restaurante não pode ser nulo');
-    }
-
-    final index = _restaurants.indexWhere((r) => r.id == restaurant.id);
-
-    if (index == -1) {
-      throw Exception('Restaurante não encontrado');
-    }
-
-    final updatedRestaurant = restaurant.copyWith(updatedAt: DateTime.now());
-
-    _restaurants[index] = updatedRestaurant;
-
-    return updatedRestaurant;
   }
 
   @override
