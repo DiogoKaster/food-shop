@@ -1,6 +1,14 @@
 # Ifood Shop
 
-Um novo projeto Flutter.
+Um novo projeto Flutter para compras de pratos de restaurantes.
+
+## Alunos
+
+Diogo Kaster
+
+Rafael de Paiva Perina
+
+Isabela Novaes
 
 ## Introdução
 
@@ -18,4 +26,6 @@ A estrutura do projeto foi definida com base na arquitetura MVVM, conforme recom
 
 Já implementamos as estruturas de models, repositories e definimos a separação das camadas. No entanto, tivemos alguns desafios ao implementar a funcionalidade de controle de estado usando o ViewModel, o que ainda está sendo ajustado para garantir uma integração eficiente entre as camadas.
 
-Até o momento não existe nenhuma específicação de instalação pois não existem pacotes adicionais além dos já disponibilizados pelo Flutter.
+Para gerenciamento de estado foi utilizada a biblioteca Provider em conjunto com Path.
+
+E para construção de um banco de dados local foi utilizado o Sqflite.
