@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_2/config/app.dart';
+import 'package:flutter_application_2/data/repositories/order_item_repository.dart';
+import 'package:flutter_application_2/data/repositories/order_repository.dart';
 import 'package:flutter_application_2/data/repositories/product_respository.dart';
 import 'package:flutter_application_2/data/repositories/restaurant_repository.dart';
 import 'package:flutter_application_2/data/repositories/user_repository.dart';
+import 'package:flutter_application_2/data/services/cart_service.dart';
 import 'package:flutter_application_2/ui/edit_profile/view_model/edit_profile_view_model.dart';
 import 'package:flutter_application_2/ui/home/view_model/home_view_model.dart';
 import 'package:flutter_application_2/ui/login/view_model/login_view_model.dart';
@@ -16,25 +19,40 @@ void main() {
   runApp(
     MultiProvider(
       providers: [
-        Provider<UserRepository>(create: (context) => DatabaseUserRepository()),
+        Provider<UserRepository>(create: (_) => DatabaseUserRepository()),
         Provider<RestaurantRepository>(
-          create: (context) => DatabaseRestaurantRepository(),
+          create: (_) => DatabaseRestaurantRepository(),
         ),
-        ChangeNotifierProvider<HomeViewModel>(
+        Provider<ProductRepository>(create: (_) => DatabaseProductRepository()),
+        Provider<OrderRepository>(create: (_) => DatabaseOrderRepository()),
+        Provider<OrderItemRepository>(
+          create: (_) => DatabaseOrderItemRepository(),
+        ),
+
+        ChangeNotifierProvider(create: (_) => SessionViewModel()),
+
+        ChangeNotifierProvider(
+          create:
+              (context) => CartService(
+                orderRepository: context.read<OrderRepository>(),
+                orderItemRepository: context.read<OrderItemRepository>(),
+              ),
+        ),
+
+        ChangeNotifierProvider(
           create:
               (context) => HomeViewModel(
                 restaurantRepository: context.read<RestaurantRepository>(),
               ),
         ),
-        ChangeNotifierProvider(create: (context) => SessionViewModel()),
         ChangeNotifierProvider(
           create:
               (context) => LoginViewModel(
-                userRepository: DatabaseUserRepository(),
+                userRepository: context.read<UserRepository>(),
                 sessionViewModel: context.read<SessionViewModel>(),
               ),
         ),
-        ChangeNotifierProvider<RegisterViewModel>(
+        ChangeNotifierProvider(
           create:
               (context) => RegisterViewModel(
                 userRepository: context.read<UserRepository>(),
@@ -49,14 +67,15 @@ void main() {
         ChangeNotifierProvider(
           create:
               (context) => EditProfileViewModel(
-                userRepository: DatabaseUserRepository(),
+                userRepository: context.read<UserRepository>(),
                 sessionViewModel: context.read<SessionViewModel>(),
               ),
         ),
         ChangeNotifierProvider(
           create:
-              (context) =>
-                  MenuViewModel(productRepository: DatabaseProductRepository()),
+              (context) => MenuViewModel(
+                productRepository: context.read<ProductRepository>(),
+              ),
         ),
       ],
       child: App(),

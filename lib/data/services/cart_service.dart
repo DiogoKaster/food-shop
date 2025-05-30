@@ -26,7 +26,7 @@ class CartService extends ChangeNotifier {
   void startOrder({
     required int userId,
     required int restaurantId,
-    required int userAddressId,
+    int? userAddressId,
     required DeliveryType deliveryType,
   }) {
     _currentOrder = Order(
