@@ -1,4 +1,4 @@
-enum DeliveryType { standard, express }
+enum DeliveryType { delivery, atLocal }
 
 enum OrderStatus { preparing, inDelivery, delivered, cancelled }
 

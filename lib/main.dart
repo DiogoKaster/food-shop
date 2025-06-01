@@ -36,6 +36,7 @@ void main() {
               (context) => CartService(
                 orderRepository: context.read<OrderRepository>(),
                 orderItemRepository: context.read<OrderItemRepository>(),
+                productRepository: context.read<ProductRepository>(),
               ),
         ),
 

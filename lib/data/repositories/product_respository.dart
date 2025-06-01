@@ -59,9 +59,6 @@ class DatabaseProductRepository implements ProductRepository {
   @override
   Future<Product> update(Product product) async {
     final db = await _db;
-    if (product.id == null) {
-      throw Exception('ID do produto não pode ser nulo');
-    }
 
     await db.update(
       'products',
@@ -175,10 +172,6 @@ class InMemoryProductRepository implements ProductRepository {
 
   @override
   Future<Product> update(Product product) async {
-    if (product.id == null) {
-      throw Exception('ID do produto não pode ser nulo');
-    }
-
     final index = _products.indexWhere((p) => p.id == product.id);
 
     if (index == -1) {

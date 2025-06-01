@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_2/data/services/cart_service.dart';
+import 'package:flutter_application_2/domain/models/order.dart';
 import 'package:flutter_application_2/ui/core/ui/menu_item_card.dart';
 import 'package:flutter_application_2/ui/menu/view_model/menu_view_model.dart';
+import 'package:flutter_application_2/ui/shared/session_view_model.dart';
 import 'package:provider/provider.dart';
 
 class MenuProductList extends StatelessWidget {
-  const MenuProductList({super.key});
+  final int restaurantId;
+
+  const MenuProductList({super.key, required this.restaurantId});
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +39,12 @@ class MenuProductList extends StatelessWidget {
                 descricao: product.description,
                 preco: product.price,
                 onTap: () {
-                  _mostrarPopup(context, product.name, product.price);
+                  _mostrarPopup(
+                    context,
+                    product.id,
+                    product.name,
+                    product.price,
+                  );
                 },
               ),
             );
@@ -44,7 +54,12 @@ class MenuProductList extends StatelessWidget {
     );
   }
 
-  void _mostrarPopup(BuildContext context, String nome, double preco) {
+  void _mostrarPopup(
+    BuildContext context,
+    int productId,
+    String nome,
+    double preco,
+  ) {
     int quantidade = 1;
 
     showModalBottomSheet(
@@ -78,6 +93,25 @@ class MenuProductList extends StatelessWidget {
                   const SizedBox(height: 16),
                   ElevatedButton(
                     onPressed: () {
+                      final cartService = context.read<CartService>();
+                      final session = context.read<SessionViewModel>();
+                      final userId =
+                          session
+                              .loggedUser
+                              ?.id; // supondo que a SessionViewModel tenha o userId
+
+                      if (cartService.currentOrder == null && userId != null) {
+                        cartService.startOrder(
+                          userId: userId,
+                          restaurantId: restaurantId, // do parâmetro do widget
+                          userAddressId: null, // ajuste se tiver
+                          deliveryType:
+                              DeliveryType.delivery, // ajuste conforme app
+                        );
+                      }
+
+                      cartService.addItem(productId, quantidade);
+
                       Navigator.pop(context);
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(

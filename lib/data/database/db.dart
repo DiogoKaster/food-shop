@@ -18,7 +18,7 @@ class DB {
     final path = join(await getDatabasesPath(), 'foodshop.db');
 
     //descomentar se quiser apagar o database
-    await deleteDatabase(path);
+    // await deleteDatabase(path);
 
     return await openDatabase(path, version: 1, onCreate: _onCreate);
   }
