@@ -9,6 +9,7 @@ import 'package:flutter_application_2/data/services/cart_service.dart';
 import 'package:flutter_application_2/ui/edit_profile/view_model/edit_profile_view_model.dart';
 import 'package:flutter_application_2/ui/home/view_model/home_view_model.dart';
 import 'package:flutter_application_2/ui/login/view_model/login_view_model.dart';
+import 'package:flutter_application_2/ui/manage_address/view_model/manage_address_view_model.dart';
 import 'package:flutter_application_2/ui/menu/view_model/menu_view_model.dart';
 import 'package:flutter_application_2/ui/profile/view_model/profile_view_model.dart';
 import 'package:flutter_application_2/ui/register/view_model/register_view_model.dart';
@@ -77,6 +78,13 @@ void main() {
           create:
               (context) => MenuViewModel(
                 productRepository: context.read<ProductRepository>(),
+              ),
+        ),
+        ChangeNotifierProvider(
+          create:
+              (context) => ManageAddressViewModel(
+                userRepository: context.read<UserRepository>(),
+                sessionViewModel: context.read<SessionViewModel>(),
               ),
         ),
       ],

@@ -17,7 +17,7 @@ class DB {
   Future<Database> _initDatabase() async {
     final path = join(await getDatabasesPath(), 'foodshop.db');
 
-    //descomentar se quiser apagar o database
+    //descomentar se quiser apagar o databasse
     // await deleteDatabase(path);
 
     return await openDatabase(path, version: 1, onCreate: _onCreate);
@@ -41,7 +41,16 @@ class DB {
       email TEXT NOT NULL UNIQUE,
       document TEXT NOT NULL,
       password TEXT NOT NULL,
-      profile_image TEXT
+      profile_image TEXT,
+      cep TEXT,
+      street TEXT,
+      number TEXT,
+      complement TEXT,
+      neighborhood TEXT,
+      city TEXT,
+      state TEXT,
+      created_at TEXT,
+      updated_at TEXT
     );
   ''';
 

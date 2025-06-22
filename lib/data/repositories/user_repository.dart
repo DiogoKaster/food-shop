@@ -100,7 +100,22 @@ class DatabaseUserRepository implements UserRepository {
       email: map['email'],
       document: map['document'],
       password: map['password'],
-      profileImage: map['profile_image'], //adicionado
+      profileImage: map['profile_image'],
+      createdAt:
+          map['created_at'] != null
+              ? DateTime.tryParse(map['created_at'])
+              : null,
+      updatedAt:
+          map['updated_at'] != null
+              ? DateTime.tryParse(map['updated_at'])
+              : null,
+      cep: map['cep'],
+      street: map['street'],
+      number: map['number'],
+      complement: map['complement'],
+      neighborhood: map['neighborhood'],
+      city: map['city'],
+      state: map['state'],
     );
   }
 
@@ -110,7 +125,16 @@ class DatabaseUserRepository implements UserRepository {
       'email': user.email,
       'document': user.document,
       'password': user.password,
-      'profile_image': user.profileImage, //adicionado
+      'profile_image': user.profileImage,
+      'created_at': user.createdAt?.toIso8601String(),
+      'updated_at': user.updatedAt?.toIso8601String(),
+      'cep': user.cep,
+      'street': user.street,
+      'number': user.number,
+      'complement': user.complement,
+      'neighborhood': user.neighborhood,
+      'city': user.city,
+      'state': user.state,
     };
 
     if (includeId && user.id != null) {

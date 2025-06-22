@@ -79,7 +79,7 @@ class _OrderScreenContent extends StatelessWidget {
         child: ListTile(
           title: Text('Pedido #${order.id}'),
           subtitle: Text(
-            'Status: ${order.status}\nTotal: R\$ ${order.totalPrice.toStringAsFixed(2)}',
+            'Status: ${order.status.name}\nTotal: R\$ ${order.totalPrice.toStringAsFixed(2)}',
           ),
           isThreeLine: true,
         ),
