@@ -100,6 +100,7 @@ class DatabaseUserRepository implements UserRepository {
       email: map['email'],
       document: map['document'],
       password: map['password'],
+      profileImage: map['profile_image'], //adicionado
     );
   }
 
@@ -109,6 +110,7 @@ class DatabaseUserRepository implements UserRepository {
       'email': user.email,
       'document': user.document,
       'password': user.password,
+      'profile_image': user.profileImage, //adicionado
     };
 
     if (includeId && user.id != null) {
