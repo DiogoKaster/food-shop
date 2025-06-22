@@ -65,7 +65,7 @@ class _MenuScreenState extends State<MenuScreen> {
               ),
             ),
           ),
-          const Expanded(child: MenuProductList()),
+          Expanded(child: MenuProductList(restaurantId: widget.restaurantId)),
           Padding(
             padding: const EdgeInsets.all(16),
             child: SizedBox(
