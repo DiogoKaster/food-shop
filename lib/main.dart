@@ -44,6 +44,7 @@ void main() {
           create:
               (context) => ProfileViewModel(
                 sessionViewModel: context.read<SessionViewModel>(),
+                userRepository: context.read<UserRepository>(),
               ),
         ),
         ChangeNotifierProvider(

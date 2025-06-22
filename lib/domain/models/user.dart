@@ -4,6 +4,7 @@ class User {
   final String email;
   final String document;
   final String password;
+  final String? profileImage; //adicionado
   final DateTime? createdAt;
   final DateTime? updatedAt;
 
@@ -13,6 +14,7 @@ class User {
     required this.email,
     required this.document,
     required this.password,
+    this.profileImage, //adicionado
     this.createdAt,
     this.updatedAt,
   });
@@ -23,6 +25,7 @@ class User {
     String? email,
     String? document,
     String? password,
+    String? profileImage, //adicionado
     DateTime? createdAt,
     DateTime? updatedAt,
   }) {
@@ -32,6 +35,7 @@ class User {
       email: email ?? this.email,
       document: document ?? this.document,
       password: password ?? this.password,
+      profileImage: profileImage ?? this.profileImage, //adicionado
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
     );

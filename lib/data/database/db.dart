@@ -37,7 +37,8 @@ class DB {
       name TEXT NOT NULL,
       email TEXT NOT NULL UNIQUE,
       document TEXT NOT NULL,
-      password TEXT NOT NULL
+      password TEXT NOT NULL,
+      profile_image TEXT
     );
   ''';
 
