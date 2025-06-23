@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_2/ui/home/widgets/home_screen.dart';
 import 'package:flutter_application_2/ui/order/widget/order_screen.dart';
 import 'package:flutter_application_2/ui/profile/widget/profile_screen.dart';
-import 'package:flutter_application_2/ui/search/widget/search_screen.dart';
 
 class PrincipalScreen extends StatefulWidget {
   const PrincipalScreen({super.key});
@@ -52,7 +51,7 @@ class _PrincipalScreenState extends State<PrincipalScreen> {
         onPageChanged: setCurrentPage,
         children: const [
           HomeScreen(),
-          SearchScreen(),
+          // SearchScreen(),
           OrderScreen(),
           ProfileScreen(),
         ],
@@ -64,7 +63,7 @@ class _PrincipalScreenState extends State<PrincipalScreen> {
         unselectedItemColor: colorScheme.onSurface.withValues(alpha: 0.6),
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Início'),
-          BottomNavigationBarItem(icon: Icon(Icons.search), label: 'Buscar'),
+          // BottomNavigationBarItem(icon: Icon(Icons.search), label: 'Buscar'),
           BottomNavigationBarItem(
             icon: Icon(Icons.receipt_long),
             label: 'Pedidos',
