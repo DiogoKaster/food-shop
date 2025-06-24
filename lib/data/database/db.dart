@@ -17,7 +17,7 @@ class DB {
   Future<Database> _initDatabase() async {
     final path = join(await getDatabasesPath(), 'foodshop.db');
 
-    //descomentar se quiser apagar o database
+    //descomentar se quiser apagar o databasse
     //await deleteDatabase(path);
 
     return await openDatabase(path, version: 1, onCreate: _onCreate);
@@ -28,6 +28,9 @@ class DB {
     await db.execute(_restaurant);
     await db.execute(_product);
 
+    await db.execute(_order);
+    await db.execute(_orderItem);
+
     await _insertInitialData(db);
   }
 
@@ -37,7 +40,17 @@ class DB {
       name TEXT NOT NULL,
       email TEXT NOT NULL UNIQUE,
       document TEXT NOT NULL,
-      password TEXT NOT NULL
+      password TEXT NOT NULL,
+      profile_image TEXT,
+      cep TEXT,
+      street TEXT,
+      number TEXT,
+      complement TEXT,
+      neighborhood TEXT,
+      city TEXT,
+      state TEXT,
+      created_at TEXT,
+      updated_at TEXT
     );
   ''';
 
@@ -66,6 +79,37 @@ class DB {
       price REAL NOT NULL,
       image TEXT,
       FOREIGN KEY (restaurant_id) REFERENCES restaurants(id) ON DELETE CASCADE
+    );
+  ''';
+
+  String get _order => '''
+    CREATE TABLE orders (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      user_id INTEGER NOT NULL,
+      restaurant_id INTEGER NOT NULL,
+      user_address_id INTEGER,
+      delivery_type TEXT NOT NULL,
+      status TEXT NOT NULL,
+      total_price REAL NOT NULL,
+      paid_at TEXT,
+      created_at TEXT DEFAULT CURRENT_TIMESTAMP,
+      updated_at TEXT DEFAULT CURRENT_TIMESTAMP,
+      FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+      FOREIGN KEY (restaurant_id) REFERENCES restaurants(id) ON DELETE CASCADE,
+      FOREIGN KEY (user_address_id) REFERENCES user_addresses(id) ON DELETE SET NULL
+    );
+''';
+
+  String get _orderItem => '''
+    CREATE TABLE order_items (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      order_id INTEGER NOT NULL,
+      product_id INTEGER NOT NULL,
+      quantity INTEGER NOT NULL,
+      created_at TEXT DEFAULT CURRENT_TIMESTAMP,
+      updated_at TEXT DEFAULT CURRENT_TIMESTAMP,
+      FOREIGN KEY (order_id) REFERENCES orders(id) ON DELETE CASCADE,
+      FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE CASCADE
     );
   ''';
 

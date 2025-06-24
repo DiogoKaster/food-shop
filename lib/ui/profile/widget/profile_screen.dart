@@ -1,12 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_2/routing/app_routes.dart';
 import 'package:flutter_application_2/ui/edit_profile/widget/edit_profile_screen.dart';
+import 'package:flutter_application_2/ui/manage_address/widgets/manage_address_screen.dart';
 import 'package:flutter_application_2/ui/profile/view_model/profile_view_model.dart';
 import 'package:provider/provider.dart';
 
-class ProfileScreen extends StatelessWidget {
+class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
 
+  @override
+  State<ProfileScreen> createState() => _ProfileScreenState();
+}
+
+class _ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
@@ -28,13 +34,59 @@ class ProfileScreen extends StatelessWidget {
           Center(
             child: Column(
               children: [
-                CircleAvatar(
-                  radius: 50,
-                  backgroundColor: colorScheme.primary.withValues(alpha: 0.1),
-                  child: Icon(
-                    Icons.person,
-                    size: 60,
-                    color: colorScheme.primary,
+                GestureDetector(
+                  onTap: () {
+                    showModalBottomSheet(
+                      context: context,
+                      builder: (_) {
+                        return SafeArea(
+                          child: Wrap(
+                            children: [
+                              ListTile(
+                                leading: const Icon(Icons.camera_alt),
+                                title: const Text('Tirar Foto'),
+                                onTap: () async {
+                                  Navigator.pop(context);
+                                  await profileViewModel.pickImageFromCamera();
+                                  setState(() {});
+                                },
+                              ),
+                              ListTile(
+                                leading: const Icon(Icons.photo_library),
+                                title: const Text('Escolher da Galeria'),
+                                onTap: () async {
+                                  Navigator.pop(context);
+                                  await profileViewModel.pickImageFromGallery();
+
+                                  setState(() {});
+                                },
+                              ),
+                            ],
+                          ),
+                        );
+                      },
+                    );
+                  },
+
+                  child: CircleAvatar(
+                    key: UniqueKey(),
+                    radius: 50,
+                    backgroundColor: colorScheme.primary.withOpacity(0.1),
+                    backgroundImage:
+                        profileViewModel.profileImage != null
+                            ? FileImage(
+                              profileViewModel.profileImage!,
+                              scale: UniqueKey().hashCode.toDouble(),
+                            )
+                            : null,
+                    child:
+                        profileViewModel.profileImage == null
+                            ? Icon(
+                              Icons.person,
+                              size: 60,
+                              color: colorScheme.primary,
+                            )
+                            : null,
                   ),
                 ),
                 const SizedBox(height: 16.0),
@@ -56,6 +108,7 @@ class ProfileScreen extends StatelessWidget {
           ),
 
           const SizedBox(height: 32.0),
+
           ListTile(
             leading: Icon(Icons.edit, color: colorScheme.primary),
             title: const Text('Editar Perfil'),
@@ -64,6 +117,18 @@ class ProfileScreen extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (_) => const EditProfileScreen()),
+              );
+            },
+          ),
+          const Divider(),
+          ListTile(
+            leading: Icon(Icons.house_outlined, color: colorScheme.primary),
+            title: const Text('Gerenciar Endereço'),
+            trailing: const Icon(Icons.arrow_forward_ios, size: 16),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => const ManageAddressScreen()),
               );
             },
           ),
