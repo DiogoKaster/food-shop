@@ -29,13 +29,14 @@ class ProfileViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> pickImage() async {
+  Future<void> pickImageFromCamera() async {
     final picker = ImagePicker();
     final pickedFile = await picker.pickImage(source: ImageSource.camera);
 
     if (pickedFile != null && loggedUser != null) {
       final directory = await getApplicationDocumentsDirectory();
-      final imagePath = '${directory.path}/profile_user_${loggedUser!.id}.jpg';
+      final imagePath =
+          '${directory.path}/profile_user_${loggedUser!.id}_${DateTime.now().millisecondsSinceEpoch}.jpg';
 
       final savedImage = await File(pickedFile.path).copy(imagePath);
       _profileImage = savedImage;
@@ -44,15 +45,39 @@ class ProfileViewModel extends ChangeNotifier {
 
       await _userRepository.update(updatedUser);
       _sessionViewModel.setUser(updatedUser);
-      await _loadProfileImage();
+      notifyListeners();
+    }
+  }
+
+  Future<void> pickImageFromGallery() async {
+    final picker = ImagePicker();
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+
+    if (pickedFile != null && loggedUser != null) {
+      final directory = await getApplicationDocumentsDirectory();
+      final imagePath =
+          '${directory.path}/profile_user_${loggedUser!.id}_${DateTime.now().millisecondsSinceEpoch}.jpg';
+
+      final savedImage = await File(pickedFile.path).copy(imagePath);
+      _profileImage = savedImage;
+
+      final updatedUser = loggedUser!.copyWith(profileImage: savedImage.path);
+
+      await _userRepository.update(updatedUser);
+      _sessionViewModel.setUser(updatedUser);
       notifyListeners();
     }
   }
 
   Future<void> _loadProfileImage() async {
     final user = loggedUser;
-    if (user?.profileImage != null && File(user!.profileImage!).existsSync()) {
-      _profileImage = File(user.profileImage!);
+    if (user?.profileImage != null) {
+      final file = File(user!.profileImage!);
+      if (file.existsSync()) {
+        _profileImage = file;
+      } else {
+        _profileImage = null;
+      }
     } else {
       _profileImage = null;
     }

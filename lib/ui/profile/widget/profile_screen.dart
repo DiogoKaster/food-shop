@@ -35,17 +35,49 @@ class _ProfileScreenState extends State<ProfileScreen> {
             child: Column(
               children: [
                 GestureDetector(
-                  onTap: () async {
-                    await profileViewModel.pickImage();
-                    setState(() {}); // força rebuild imediato com nova imagem
+                  onTap: () {
+                    showModalBottomSheet(
+                      context: context,
+                      builder: (_) {
+                        return SafeArea(
+                          child: Wrap(
+                            children: [
+                              ListTile(
+                                leading: const Icon(Icons.camera_alt),
+                                title: const Text('Tirar Foto'),
+                                onTap: () async {
+                                  Navigator.pop(context);
+                                  await profileViewModel.pickImageFromCamera();
+                                  setState(() {});
+                                },
+                              ),
+                              ListTile(
+                                leading: const Icon(Icons.photo_library),
+                                title: const Text('Escolher da Galeria'),
+                                onTap: () async {
+                                  Navigator.pop(context);
+                                  await profileViewModel.pickImageFromGallery();
+
+                                  setState(() {});
+                                },
+                              ),
+                            ],
+                          ),
+                        );
+                      },
+                    );
                   },
+
                   child: CircleAvatar(
-                    key: UniqueKey(), // força descartar o cache da imagem
+                    key: UniqueKey(),
                     radius: 50,
                     backgroundColor: colorScheme.primary.withOpacity(0.1),
                     backgroundImage:
                         profileViewModel.profileImage != null
-                            ? FileImage(profileViewModel.profileImage!)
+                            ? FileImage(
+                              profileViewModel.profileImage!,
+                              scale: UniqueKey().hashCode.toDouble(),
+                            )
                             : null,
                     child:
                         profileViewModel.profileImage == null
