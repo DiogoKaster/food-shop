@@ -82,7 +82,7 @@ class ManageAddressViewModel extends ChangeNotifier {
           city = data['localidade'];
           state = data['uf'];
           cep = data['cep'];
-          errorMessage = null; // Limpa a mensagem de erro em caso de sucesso
+          errorMessage = null;
         }
       } else {
         errorMessage = 'Erro ao buscar endereço: ${response.statusCode}.';
